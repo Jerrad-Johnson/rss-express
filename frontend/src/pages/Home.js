@@ -1,4 +1,5 @@
 import axios from "axios";
+let serverURL = 'http://localhost:3001';
 
 let cc = console.log;
 
@@ -12,10 +13,13 @@ function Home(){
     )
 }
 
-async function getXML(url = `https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1`){
+async function getXML(url){
     await axios({
-            method: 'GET',
-            "url": url,
+            method: 'POST',
+            url: `${serverURL}/xml/getXML`,
+            data: {
+                rssURL: JSON.stringify("https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1")
+            },
             headers: {
                 'Content-Type': 'text/xml'
             }

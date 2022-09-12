@@ -2,11 +2,15 @@ const express = require('express');
 const router = express.Router();
 const axios = require("axios");
 const {XMLParser} = require("../node_modules/fast-xml-parser/src/fxp");
+/*const bodyParser = require('body-parser');*/
 const parser = new XMLParser();
 const cc = console.log;
 
-router.get('/getXML', async (req, res, next) => {
-    let feedResponse = await getXMLData(url);
+/*router.use(bodyParser.urlencoded({ extended: true }));*/
+
+router.post('/getXML', async (req, res, next) => {
+    cc(req.body)
+    /*let feedResponse = await getXMLData(url);
     let parsedResponse = parser.parse(feedResponse.data);
 
     res.locals.entries = parsedResponse.rss.channel.item;
@@ -14,7 +18,7 @@ router.get('/getXML', async (req, res, next) => {
     res.locals.feedLink = parsedResponse.rss.channel.link;
     if (parsedResponse?.rss?.channel?.lastBuildDate) res.locals.lastUpdated = parsedResponse.rss.channel.lastBuildDate;
 
-    res.send(res.locals);
+    res.send(res.locals);*/
 })
 
 async function getXMLData(url){
