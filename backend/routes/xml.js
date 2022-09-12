@@ -5,11 +5,16 @@ const {XMLParser} = require("../node_modules/fast-xml-parser/src/fxp");
 /*const bodyParser = require('body-parser');*/
 const parser = new XMLParser();
 const cc = console.log;
-
+const cors = require('cors');
 /*router.use(bodyParser.urlencoded({ extended: true }));*/
 
+
+router.use(cors({
+    origin: "http://localhost:3000",
+}));
+
 router.post('/getXML', async (req, res, next) => {
-    cc(req.body)
+    res.send("test");
     /*let feedResponse = await getXMLData(url);
     let parsedResponse = parser.parse(feedResponse.data);
 

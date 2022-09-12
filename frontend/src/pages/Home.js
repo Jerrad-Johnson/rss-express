@@ -14,20 +14,9 @@ function Home(){
 }
 
 async function getXML(url){
-    await axios({
-            method: 'POST',
-            url: `${serverURL}/xml/getXML`,
-            data: {
-                rssURL: JSON.stringify("https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1")
-            },
-            headers: {
-                'Content-Type': 'text/xml'
-            }
-        },
-    )
-        .then((response) => {
-            cc(response);
-        });
+    let results = await axios.post("http://localhost:3001/xml/getXML", {test: "idk"});
+    cc(results.data);
+
 }
 
 export default Home;
