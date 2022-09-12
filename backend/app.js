@@ -3,6 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+let cc = console.log;
+const { XMLParser, XMLBuilder, XMLValidator} = require("./node_modules/fast-xml-parser/src/fxp");
+
+const parser = new XMLParser();
+
+//let data = parser.parse(result);
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

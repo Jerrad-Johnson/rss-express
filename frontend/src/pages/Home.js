@@ -1,3 +1,5 @@
+import axios from "axios";
+
 let cc = console.log;
 
 function Home(){
@@ -11,12 +13,17 @@ function Home(){
 }
 
 async function getXML(url = `https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1`){
-    let request = new XMLHttpRequest();
-    await request.open("GET", url, true);
-    cc(4)
-    request.onreadystatechange = () => {
-        cc(5)
-    }
+    await axios({
+            method: 'GET',
+            "url": url,
+            headers: {
+                'Content-Type': 'text/xml'
+            }
+        },
+    )
+        .then((response) => {
+            cc(response);
+        });
 }
 
 export default Home;
