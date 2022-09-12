@@ -1,34 +1,50 @@
-var express = require('express');
+const express = require('express');
+const router = express.Router();
 const axios = require("axios");
-var router = express.Router();
-const { XMLParser, XMLBuilder, XMLValidator} = require("../node_modules/fast-xml-parser/src/fxp");
+const {XMLParser} = require("../node_modules/fast-xml-parser/src/fxp");
 const parser = new XMLParser();
-let cc = console.log;
+const cc = console.log;
 
-router.use('/getXML', async (req, res, next) => {
-    let data = await getXMLData();
-    cc(data)
-    res.locals.xml = parser.parse(data);
-    next();
+router.get('/getXML', async (req, res, next) => {
+    let feedResponse = await getXMLData(url);
+    let parsedResponse = parser.parse(feedResponse.data);
+
+    res.locals.entries = parsedResponse.rss.channel.item;
+    res.locals.feedTitle = parsedResponse.rss.channel.title;
+    res.locals.feedLink = parsedResponse.rss.channel.link;
+    if (parsedResponse?.rss?.channel?.lastBuildDate) res.locals.lastUpdated = parsedResponse.rss.channel.lastBuildDate;
+
+    res.send(res.locals);
 })
 
-router.get('/getXML', (req, res) => {
-    res.send(res.locals.xml);
-});
-
-async function getXMLData(url = `https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1`){
-    let results = await axios({
-            method: 'GET',
-            "url": url,
-            headers: {
-                'Content-Type': 'text/xml'
-            }
-        },
-    );
+async function getXMLData(url){
+    let results = await axios.get(url);
 
     return results;
 }
 
-
-
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//res.locals.fullXMLResponse = parsedResponse;
+/*    let listOfTitles = [];
+
+    for (let i = 0; i < res.locals.entries.length; i++){
+        listOfTitles.push(res.locals.entries[i].title)
+    }*/
+
+
