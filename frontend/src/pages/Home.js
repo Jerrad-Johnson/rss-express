@@ -31,20 +31,26 @@ function RSSCard({url, position}){
     const [getEntriesNow, setGetEntriesNow] = useState(true);
 
     if (getEntriesNow === true) {
+        setRSSResults("Loading.");
         getXML(url, setRSSResults);
         setGetEntriesNow(false);
     }
 
     return (
       <>
-          {rssResults !== "Loading." && rssResults.entries[0].title}
+        {rssResults === "Loading." && "LOADING"}
+        {/*{rssResults !== "Loading." && rssResults.entries[0].title}*/}
+
+        <button onClick={() => {
+            setGetEntriesNow(true);
+        }}>Reload</button>
       </>
     );
 }
 
-async function getXML(url, setRSSEntries){
+async function getXML(url, setRSSResults){
     let results = await axios.post("http://localhost:3001/xml/getXML", {feedURL: url});
-    setRSSEntries(results.data);
+    setRSSResults(results.data);
     cc(results.data);
 }
 
