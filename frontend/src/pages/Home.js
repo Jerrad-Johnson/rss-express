@@ -9,7 +9,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {Container} from "@mui/material";
 import {Typography} from "@mui/material";
-import {Fragment} from "react";
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -117,8 +116,12 @@ function Home(){
     );
 
     const drawer = ['left'].map((anchor) => (
-        <Fragment key={anchor}>
-            <Button onClick={toggleDrawer(anchor, true)} className={"menuButton"}>Options</Button>
+        <>
+            <div key={anchor} className={"menuButtonContainer"}>
+                <Box textAlign={"center"}>
+                    <Button onClick={toggleDrawer(anchor, true)}>Options</Button>
+                </Box>
+            </div>
             <Drawer
                 anchor={anchor}
                 open={drawerState[anchor]}
@@ -126,7 +129,7 @@ function Home(){
             >
                 {list(anchor)}
             </Drawer>
-        </Fragment>
+        </>
     ));
 
     return (
