@@ -45,3 +45,14 @@
   background-color: #000;
   color:#fff;
 }
+
+.rssDateDescription{
+  @apply
+  block
+  mt-4
+}
+
+.rssAccordionTitle{
+  @apply
+  mr-4
+}
