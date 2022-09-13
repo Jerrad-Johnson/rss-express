@@ -5,7 +5,7 @@ let cc = console.log;
 
 function Home(){
 
-    getXML();
+    getXML("https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1");
     return (
         <>
             Test
@@ -14,7 +14,7 @@ function Home(){
 }
 
 async function getXML(url){
-    let results = await axios.post("http://localhost:3001/xml/getXML", {test: "idk"});
+    let results = await axios.post("http://localhost:3001/xml/getXML", {feedURL: url});
     cc(results.data);
 
 }

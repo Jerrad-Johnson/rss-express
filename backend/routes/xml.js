@@ -14,16 +14,15 @@ router.use(cors({
 }));
 
 router.post('/getXML', async (req, res, next) => {
-    res.send("test");
-    /*let feedResponse = await getXMLData(url);
+    let feedResponse = await getXMLData(req.body.feedURL);
     let parsedResponse = parser.parse(feedResponse.data);
 
     res.locals.entries = parsedResponse.rss.channel.item;
     res.locals.feedTitle = parsedResponse.rss.channel.title;
-    res.locals.feedLink = parsedResponse.rss.channel.link;
+    res.locals.feedLink = req.body.feedURL;
     if (parsedResponse?.rss?.channel?.lastBuildDate) res.locals.lastUpdated = parsedResponse.rss.channel.lastBuildDate;
 
-    res.send(res.locals);*/
+    res.send(res.locals);
 })
 
 async function getXMLData(url){
