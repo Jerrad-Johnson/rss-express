@@ -69,5 +69,10 @@
 .rssCardContainer{
   flex: calc(100%/2);
   min-width: 0;
+  margin-bottom: 24px;
+}
+
+.feedTitle{
+  text-align: center;
 }
 

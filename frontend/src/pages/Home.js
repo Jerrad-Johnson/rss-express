@@ -8,6 +8,7 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {Container} from "@mui/material";
+import {Typography} from "@mui/material";
 
 let serverURL = 'http://localhost:3001';
 
@@ -20,6 +21,9 @@ function Home(){
    }, {
        url: "https://slickdeals.net/newsearch.php?mode=popdeals&searcharea=deals&searchin=first&rss=1",
        position: 1,
+   }, {
+       url: "http://feeds.feedburner.com/SlickdealsnetUP",
+       position: 2
    }]);
 
     const theme = createTheme({
@@ -44,16 +48,20 @@ function Home(){
     )
 }
 
+
+
 function RSSCard({url, position}){
     const [rssResults, setRSSResults] = useState("Loading.");
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
+    const [rssEntriesLimit, setRSSEntriesLimit] = useState(7); //TODO Allow users to change this
+
+    if (Array.isArray(rssResults.entries) && rssResults.entries.length > rssEntriesLimit) rssResults.entries.splice(rssEntriesLimit);
 
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
             setExpanded(isExpanded ? panel : false);
         };
-
 
     const Accordion = styled((props) => (
         <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -102,6 +110,7 @@ function RSSCard({url, position}){
     if (Array.isArray(rssResults.entries) && rssResults.entries.length > 0){
         panelsFromRSSTitles = rssResults.entries.map((e, k) => {
             return (
+                <>
                     <Accordion expanded={expanded === `panel${k}`} onChange={handleChange(`panel${k}`)}>
                         <AccordionSummary
                             aria-controls={`panel${k}bh-content`}
@@ -109,26 +118,35 @@ function RSSCard({url, position}){
                         >
                             <span className={"rssAccordionTitle"}> {e.title} </span>
                         </AccordionSummary>
-                        <AccordionDetails>
-                                <span className={"rssItemDescription"}>{e.description}</span>
-                                <span className={"rssDateDescription"}>{e.pubDate}</span>
-                        </AccordionDetails>
+
+                        <a href={e.link} target={"_blank"}>
+                            <AccordionDetails>
+                                    <span className={"rssItemDescription"}>{e.description}</span>
+                                    <span className={"rssDateDescription"}>{e.pubDate}</span>
+                            </AccordionDetails>
+                        </a>
                     </Accordion>
+                </>
             );
         });
     }
 
+    let feedTitle = (
+        <Typography variant="subtitle" component="h2" className={"feedTitle"}>
+            {rssResults.feedTitle}
+        </Typography>
+    )
+
     return (
       <>
       <Container className={"rssCardContainer"}>
-        {rssResults === "Loading." && "LOADING"}
-        {rssResults !== "Loading." && panelsFromRSSTitles}
+          <>
+            {feedTitle}
+            {rssResults === "Loading." && "LOADING"}
+            {rssResults !== "Loading." && panelsFromRSSTitles}
+          </>
 
 
-
-        <button onClick={() => {
-            setGetEntriesNow(true);
-        }}>Reload</button>
       </Container>
       </>
     );
@@ -137,6 +155,7 @@ function RSSCard({url, position}){
 async function getXML(url, setRSSResults){
     let results = await axios.post("http://localhost:3001/xml/getXML", {feedURL: url});
     setRSSResults(results.data);
+    cc(results.data);
 }
 
 export default Home;
