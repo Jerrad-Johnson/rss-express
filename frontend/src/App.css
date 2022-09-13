@@ -64,6 +64,8 @@
   display: flex;
   flex-wrap: wrap;
   /*justify-content: flex-start;*/
+  @apply
+  mt-4
 }
 
 /* TODO Allow users to change text flex calc */

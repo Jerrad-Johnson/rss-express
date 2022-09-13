@@ -73,7 +73,6 @@ function RSSCard({url, position, options, optionsDispatch}){
     const [rssResults, setRSSResults] = useState("Loading.");
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
-/*    const [rssEntriesLimit, setRSSEntriesLimit] = useState(7); //TODO Allow users to change this*/
 
     if (Array.isArray(rssResults.entries) && rssResults.entries.length > options.rssEntriesLimit) rssResults.entries.splice(options.rssEntriesLimit);
 
@@ -119,9 +118,11 @@ function RSSCard({url, position, options, optionsDispatch}){
     }));
 
     if (getEntriesNow === true) {
-        setRSSResults("Loading.");
         getXML(url, setRSSResults);
         setGetEntriesNow(false);
+        setTimeout(() => {
+            setGetEntriesNow(true)
+        }, 90000);
     }
 
     let panelsFromRSSTitles = (<></>)
