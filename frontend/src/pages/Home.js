@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
+import {Panel, PanelGroup, Placeholder} from "rsuite";
+
 let serverURL = 'http://localhost:3001';
 
 let cc = console.log;
@@ -36,10 +38,42 @@ function RSSCard({url, position}){
         setGetEntriesNow(false);
     }
 
+    let panelsFromRSSTitles = (<></>)
+
+    if (Array.isArray(rssResults.entries) && rssResults.entries.length > 0){
+        panelsFromRSSTitles = rssResults.entries.map((e, k) => {
+            cc(e)
+            return (
+                <Panel header={e.title} eventKey={k} className={"panel"} id={`panel${k}`}>
+                    <Placeholder.Paragraph> test</Placeholder.Paragraph>
+                </Panel>
+            );
+        });
+    }
+
     return (
       <>
         {rssResults === "Loading." && "LOADING"}
         {/*{rssResults !== "Loading." && rssResults.entries[0].title}*/}
+
+          <PanelGroup accordion defaultActiveKey={2} bordered>
+              <Panel header="Panel 1" eventKey={1} id="panel1">
+                  <Placeholder.Paragraph />
+              </Panel>
+              <Panel header="Panel 2" eventKey={2} id="panel2">
+                  <Placeholder.Paragraph />
+              </Panel>
+              <Panel header="Panel 3" eventKey={3} id="panel3">
+                  <Placeholder.Paragraph />
+              </Panel>
+          </PanelGroup>
+
+          <PanelGroup accordion defaultActiveKey={1} bordered className={"panelContainer"}>
+              {panelsFromRSSTitles}
+          </PanelGroup>
+
+
+
 
         <button onClick={() => {
             setGetEntriesNow(true);
