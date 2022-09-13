@@ -79,3 +79,10 @@
   text-align: center;
 }
 
+.menuButton{
+  width: 100%;
+  display: block;
+  margin: auto;
+
+}
+
