@@ -7,8 +7,7 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-
-
+import {Container} from "@mui/material";
 
 let serverURL = 'http://localhost:3001';
 
@@ -38,7 +37,9 @@ function Home(){
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            {feedDOMCards}
+            <div className={"mainContainer"}>
+                {feedDOMCards}
+            </div>
         </ThemeProvider>
     )
 }
@@ -119,6 +120,7 @@ function RSSCard({url, position}){
 
     return (
       <>
+      <Container className={"rssCardContainer"}>
         {rssResults === "Loading." && "LOADING"}
         {rssResults !== "Loading." && panelsFromRSSTitles}
 
@@ -127,6 +129,7 @@ function RSSCard({url, position}){
         <button onClick={() => {
             setGetEntriesNow(true);
         }}>Reload</button>
+      </Container>
       </>
     );
 }

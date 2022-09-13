@@ -56,3 +56,16 @@
   @apply
   mr-4
 }
+
+.mainContainer{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.rssCardContainer{
+  flex: calc(30%/1);
+  flex-grow: 1;
+  /*flex-basis: 0;*/
+  min-width: 0;
+}
+
