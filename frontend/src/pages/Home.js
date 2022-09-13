@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useReducer, useState} from "react";
 import axios from "axios";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -26,6 +26,20 @@ function Home(){
        position: 2
    }]);
 
+    const optionsInitialState = {
+        rssEntriesLimit: 7,
+    }
+
+    const [options, optionsDispatch] = useReducer(optionsReducer, optionsInitialState);
+
+    function optionsReducer(state, action){
+        switch(action.type){
+            case "setRSSEntriesLimit":
+                return {...state, rssEntriesLimit: action.payload};
+
+        }
+    }
+
     const theme = createTheme({
         palette: {
             mode: 'dark',
@@ -34,7 +48,12 @@ function Home(){
 
     let feedDOMCards = feeds.map((e) => {
         return (
-            <RSSCard key={e.position} url={e.url} position={e.position}/>
+            <RSSCard key={e.position}
+                     url={e.url}
+                     position={e.position}
+                     options = {options}
+                     optionsDispatch = {optionsDispatch}
+            />
         )
     });
 
@@ -50,13 +69,13 @@ function Home(){
 
 
 
-function RSSCard({url, position}){
+function RSSCard({url, position, options, optionsDispatch}){
     const [rssResults, setRSSResults] = useState("Loading.");
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
-    const [rssEntriesLimit, setRSSEntriesLimit] = useState(7); //TODO Allow users to change this
+/*    const [rssEntriesLimit, setRSSEntriesLimit] = useState(7); //TODO Allow users to change this*/
 
-    if (Array.isArray(rssResults.entries) && rssResults.entries.length > rssEntriesLimit) rssResults.entries.splice(rssEntriesLimit);
+    if (Array.isArray(rssResults.entries) && rssResults.entries.length > options.rssEntriesLimit) rssResults.entries.splice(options.rssEntriesLimit);
 
     const handleChange =
         (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {

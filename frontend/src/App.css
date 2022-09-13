@@ -63,6 +63,7 @@
 .mainContainer{
   display: flex;
   flex-wrap: wrap;
+  /*justify-content: flex-start;*/
 }
 
 /* TODO Allow users to change text flex calc */
