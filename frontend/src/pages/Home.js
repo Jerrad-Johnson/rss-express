@@ -205,20 +205,6 @@ function Home(){
 
     const drawer = ['left'].map((anchor) => (
         <>
-            {/*<div key={anchor} className={"menuButtonContainer"}>
-                <Box textAlign={"center"}>
-                    <Button onClick={toggleDrawer(anchor, true)}>Options</Button>
-                </Box>
-            </div>*/}
-
-            <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{ mr: 2 }}
-            >Options</IconButton>
-
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -239,46 +225,27 @@ function Home(){
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
+                        <ListItem>
+                            <div className={"menuItem"}>
+                                <span className={"menuItemSpan"}>Max Results</span>
+                                <TextField id="standard-basic" value={options.rssEntriesLimit} variant="standard" />
+                            </div>
                         </ListItem>
-                    ))}
                 </List>
                 <Divider />
                 <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
+                        <ListItem>
+                            <div className={"menuItemButtons"}>
+                                <Button variant={"contained"}>Save Options</Button>
+                            </div>
                         </ListItem>
-                    ))}
+                        <ListItem>
+                            <div className={"menuItemButtons"}>
+                                <Button variant={"contained"}>Logout</Button>
+                            </div>
+                        </ListItem>
                 </List>
             </Drawer>
-
-
-
-
-
-
-
-{/*            <Drawer
-                variant={"persistent"}
-                anchor={anchor}
-                open={drawerState[anchor]}
-                onClose={toggleDrawer(anchor, false)}
-            >
-                {list(anchor)}
-            </Drawer>*/}
         </>
     ));
 
@@ -289,10 +256,17 @@ function Home(){
                 <div className={"rssContainer"}>
                     {feedDOMCards}
                 </div>
-            {drawer}
+
+            <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{ mr: 2 }}
+            >Options</IconButton>
 
             </div>
-
+            {drawer}
         </ThemeProvider>
     )
 }

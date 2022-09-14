@@ -54,6 +54,11 @@
 
 }
 
+.menuItemButtons{
+  margin: auto;
+  display: block;
+}
+
 .menuItem span{
   @apply
     block
