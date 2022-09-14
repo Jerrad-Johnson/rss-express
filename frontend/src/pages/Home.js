@@ -202,6 +202,10 @@ function Home(){
             setOpen(false);
         };
 
+        const handleDrawerToggle = () => {
+            setOpen((prev) => !prev);
+        }
+
 
     const drawer = ['left'].map((anchor) => (
         <>
@@ -260,7 +264,7 @@ function Home(){
             <IconButton
                 color="inherit"
                 aria-label="open drawer"
-                onClick={handleDrawerOpen}
+                onClick={handleDrawerToggle}
                 edge="start"
                 sx={{ mr: 2 }}
             >Options</IconButton>
