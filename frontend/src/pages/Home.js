@@ -58,6 +58,7 @@ function Home(){
 
     const optionsInitialState = {
         rssEntriesLimit: 7,
+        columnsPerRow: 2,
     }
 
     const [options, optionsDispatch] = useReducer(optionsReducer, optionsInitialState);
@@ -66,6 +67,8 @@ function Home(){
         switch(action.type){
             case "setRSSEntriesLimit":
                 return {...state, rssEntriesLimit: action.payload};
+            case "setColumnCount":
+                return {...state, columnsPerRow: action.payload};
         }
     }
 
@@ -86,102 +89,8 @@ function Home(){
         )
     });
 
-    const list = (anchor) => (
-        <Box
-            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-            role="presentation"
-            onClick={toggleDrawer(anchor, false)}
-            onKeyDown={toggleDrawer(anchor, false)}
-        >
-            <List>
-
-                <ListItem >
-                    <div className={"menuItem"}>
-                        <span>Max Results</span>
-                        <TextField id="standard-basic" type={"number"} value={options.rssEntriesLimit} variant="standard"
-                                   sx={{width: "100%"}} onChange={(e) => {
-                                       cc(e.target.value)
-                                optionsDispatch({type: "setRSSEntriesLimit", payload: +e.target.value})
-                            }}/>
-                    </div>
-                </ListItem>
-
-                {/*                <ListItem disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <InboxIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={"test"} />
-                    </ListItemButton>
-                </ListItem>*/}
-
-            </List>
-            <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                    <ListItem key={text} disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon>
-                                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                            </ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </Box>
-    );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    const [open, setOpen] = useState(false);
     const drawerWidth = 200;
-
-    const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-        ({ theme, open }) => ({
-            flexGrow: 1,
-            padding: theme.spacing(3),
-            transition: theme.transitions.create('margin', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            marginLeft: `-${drawerWidth}px`,
-            ...(open && {
-                transition: theme.transitions.create('margin', {
-                    easing: theme.transitions.easing.easeOut,
-                    duration: theme.transitions.duration.enteringScreen,
-                }),
-                marginLeft: 0,
-            }),
-        }),
-    );
-
-    const AppBar = styled(MuiAppBar, {
-        shouldForwardProp: (prop) => prop !== 'open',
-    })(({ theme, open }) => ({
-        transition: theme.transitions.create(['margin', 'width'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        ...(open && {
-            width: `calc(100% - ${drawerWidth}px)`,
-            marginLeft: `${drawerWidth}px`,
-            transition: theme.transitions.create(['margin', 'width'], {
-                easing: theme.transitions.easing.easeOut,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        }),
-    }));
 
     const DrawerHeader = styled('div')(({ theme }) => ({
         display: 'flex',
@@ -192,22 +101,16 @@ function Home(){
         justifyContent: 'flex-end',
     }));
 
-        const [open, setOpen] = useState(false);
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
 
-        const handleDrawerOpen = () => {
-            setOpen(true);
-        };
-
-        const handleDrawerClose = () => {
-            setOpen(false);
-        };
-
-        const handleDrawerToggle = () => {
-            setOpen((prev) => !prev);
-        }
+    const handleDrawerToggle = () => {
+        setOpen((prev) => !prev);
+    }
 
 
-    const drawer = ['left'].map((anchor) => (
+    const drawer = [0].map((anchor) => (
         <>
             <Drawer
                 sx={{
@@ -232,9 +135,23 @@ function Home(){
                         <ListItem>
                             <div className={"menuItem"}>
                                 <span className={"menuItemSpan"}>Max Results</span>
-                                <TextField id="standard-basic" value={options.rssEntriesLimit} variant="standard" />
+                                <TextField id="standard-basic" value={options.rssEntriesLimit} variant="standard"
+                                           sx={{width: "20%"}} onChange={(e) => {
+                                       optionsDispatch({type: "setRSSEntriesLimit", payload: +e.target.value})
+                                    }}
+                                />
                             </div>
                         </ListItem>
+                    <ListItem>
+                        <div className={"menuItem"}>
+                            <span className={"menuItemSpan"}>Columns</span>
+                            <TextField id="standard-basic" value={options.columnsPerRow} variant="standard"
+                                   sx={{width: "20%"}} onChange={(e) => {
+                                optionsDispatch({type: "setColumnCount", payload: +e.target.value})
+                            }}
+                            />
+                        </div>
+                    </ListItem>
                 </List>
                 <Divider />
                 <List>
@@ -256,20 +173,20 @@ function Home(){
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <div className={"mainContainer"}>
-                <div className={"rssContainer"}>
-                    {feedDOMCards}
+                <div className={"mainContainer"}>
+                    <div className={"rssContainer"}>
+                        {feedDOMCards}
+                    </div>
+
+                <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerToggle}
+                    edge="start"
+                    sx={{ mr: 2 }}
+                >Options</IconButton>
+
                 </div>
-
-            <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerToggle}
-                edge="start"
-                sx={{ mr: 2 }}
-            >Options</IconButton>
-
-            </div>
             {drawer}
         </ThemeProvider>
     )
@@ -365,9 +282,11 @@ function RSSCard({url, position, options, optionsDispatch}){
         </Typography>
     )
 
+    let columnPerRowCalculation = (100/options.columnsPerRow) + "%";
+
     return (
       <>
-      <div className={"rssCardContainer"}>
+      <div className={"rssCardContainer"} style={{flex: columnPerRowCalculation}}>
           <>
             {feedTitle}
             {rssResults === "Loading." && "LOADING"}
