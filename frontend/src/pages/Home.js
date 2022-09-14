@@ -1,4 +1,4 @@
-import {useEffect, useReducer, useState} from "react";
+import {useReducer, useState} from "react";
 import axios from "axios";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -6,27 +6,17 @@ import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import {TextField} from "@mui/material";
+import {CircularProgress, TextField} from "@mui/material";
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import MenuIcon from '@mui/icons-material/Menu';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import MuiAppBar from '@mui/material/AppBar';
 import {IconButton} from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
 
 let serverURL = 'http://localhost:3001';
 
@@ -108,7 +98,6 @@ function Home(){
     const handleDrawerToggle = () => {
         setOpen((prev) => !prev);
     }
-
 
     const drawer = [0].map((anchor) => (
         <>
@@ -192,8 +181,6 @@ function Home(){
     )
 }
 
-
-
 function RSSCard({url, position, options, optionsDispatch}){
     const [rssResults, setRSSResults] = useState("Loading.");
     const [getEntriesNow, setGetEntriesNow] = useState(true);
@@ -201,8 +188,7 @@ function RSSCard({url, position, options, optionsDispatch}){
 
     if (Array.isArray(rssResults.entries) && rssResults.entries.length > options.rssEntriesLimit) rssResults.entries.splice(options.rssEntriesLimit);
 
-    const handleChange =
-        (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    const handleChange = (panel) => (event, isExpanded) => {
             setExpanded(isExpanded ? panel : false);
         };
 
@@ -289,11 +275,9 @@ function RSSCard({url, position, options, optionsDispatch}){
       <div className={"rssCardContainer"} style={{flex: columnPerRowCalculation}}>
           <>
             {feedTitle}
-            {rssResults === "Loading." && "LOADING"}
+            {rssResults === "Loading." && <CircularProgress/>}
             {rssResults !== "Loading." && panelsFromRSSTitles}
           </>
-
-
       </div>
       </>
     );
