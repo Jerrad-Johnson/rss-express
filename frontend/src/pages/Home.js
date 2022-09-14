@@ -7,7 +7,7 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import {CircularProgress, TextField} from "@mui/material";
+import {CircularProgress, LinearProgress, TextField} from "@mui/material";
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import List from '@mui/material/List';
@@ -185,6 +185,7 @@ function RSSCard({url, position, options, optionsDispatch}){
     const [rssResults, setRSSResults] = useState("Loading.");
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
+    const [reloading, setReloading] = useState(false);
 
     if (Array.isArray(rssResults.entries) && rssResults.entries.length > options.rssEntriesLimit) rssResults.entries.splice(options.rssEntriesLimit);
 
@@ -229,11 +230,13 @@ function RSSCard({url, position, options, optionsDispatch}){
     }));
 
     if (getEntriesNow === true) {
-        getXML(url, setRSSResults);
+        if (rssResults !== "Loading.") setReloading(true);
+        cc(reloading)
+        getXML(url, setRSSResults, setReloading);
         setGetEntriesNow(false);
         setTimeout(() => {
             setGetEntriesNow(true)
-        }, 90000);
+        }, 15000); //TODO Change timer
     }
 
     let panelsFromRSSTitles = (<></>)
@@ -268,6 +271,22 @@ function RSSCard({url, position, options, optionsDispatch}){
         </Typography>
     )
 
+    let reloadingIndicator = (<></>);
+
+    if (reloading === true){
+        reloadingIndicator = (
+            <div className={"reloadingIndicator"}>
+                <LinearProgress/>
+            </div>
+        );
+    } else {
+        reloadingIndicator = (
+            <div className={"reloadingIndicator"}>
+                <LinearProgress variant="determinate" value="100" />
+            </div>
+        );
+    }
+
     let columnPerRowCalculation = (100/options.columnsPerRow) + "%";
 
     return (
@@ -277,16 +296,18 @@ function RSSCard({url, position, options, optionsDispatch}){
             {feedTitle}
             {rssResults === "Loading." && <CircularProgress/>}
             {rssResults !== "Loading." && panelsFromRSSTitles}
+
+            {reloadingIndicator}
           </>
       </div>
       </>
     );
 }
 
-async function getXML(url, setRSSResults){
+async function getXML(url, setRSSResults, setReloading){
     let results = await axios.post("http://localhost:3001/xml/getXML", {feedURL: url});
     setRSSResults(results.data);
-    cc(results.data);
+    setReloading(false);
 }
 
 export default Home;
