@@ -135,12 +135,13 @@ function Home(){
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-
             <div className={"mainContainer"}>
-                {feedDOMCards}
+                <div className={"rssContainer"}>
+                    {feedDOMCards}
+                </div>
+            {drawer}
             </div>
 
-            {drawer}
         </ThemeProvider>
     )
 }
@@ -237,7 +238,7 @@ function RSSCard({url, position, options, optionsDispatch}){
 
     return (
       <>
-      <Container className={"rssCardContainer"}>
+      <div className={"rssCardContainer"}>
           <>
 
             {feedTitle}
@@ -246,7 +247,7 @@ function RSSCard({url, position, options, optionsDispatch}){
           </>
 
 
-      </Container>
+      </div>
       </>
     );
 }
