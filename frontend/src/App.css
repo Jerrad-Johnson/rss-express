@@ -50,7 +50,14 @@
   width: 100%;
 }
 
+.menuItem{
 
+}
+
+.menuItem span{
+  @apply
+    block
+}
 
 .feedTitle{
   text-align: center;
