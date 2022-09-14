@@ -8,7 +8,6 @@ const cc = console.log;
 const cors = require('cors');
 /*router.use(bodyParser.urlencoded({ extended: true }));*/
 
-
 router.use(cors({
     origin: "http://localhost:3000",
 }));
@@ -27,7 +26,6 @@ router.post('/getXML', async (req, res, next) => {
 
 async function getXMLData(url){
     let results = await axios.get(url);
-
     return results;
 }
 

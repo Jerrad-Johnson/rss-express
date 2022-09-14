@@ -17,8 +17,7 @@ import ListItem from '@mui/material/ListItem';
 import {IconButton} from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-
-let serverURL = 'http://localhost:3001';
+import {serverURL} from "../common/variables";
 
 let cc = console.log;
 
@@ -27,10 +26,10 @@ function Home(){
        url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
        position: 0,
    }, {
-       url: "http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml",
+       url: "http://feeds.feedburner.com/SlickdealsnetHT?format=xml",
        position: 1,
    }, {
-       url: "http://feeds.feedburner.com/SlickdealsnetHT?format=xml",
+       url: "http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml",
        position: 2
    }]);
 
@@ -167,6 +166,11 @@ function Home(){
                         <ListItem>
                             <div className={"menuItemButtons"}>
                                 <Button variant={"contained"}>Save Options</Button>
+                            </div>
+                        </ListItem>
+                        <ListItem>
+                            <div className={"menuItemButtons"}>
+                                <Button variant={"contained"}>Reload Now</Button>
                             </div>
                         </ListItem>
                         <ListItem>
@@ -325,7 +329,7 @@ function RSSCard({url, position, options, optionsDispatch}){
 }
 
 async function getXML(url, setRSSResults, setReloading){
-    let results = await axios.post("http://localhost:3001/xml/getXML", {feedURL: url});
+    let results = await axios.post(`${serverURL}/xml/getXML`, {feedURL: url});
     setRSSResults(results.data);
     setReloading(false);
 }
