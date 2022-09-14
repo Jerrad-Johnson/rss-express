@@ -124,8 +124,18 @@ function Home(){
                         <ListItem>
                             <div className={"menuItem"}>
                                 <span className={"menuItemSpan"}>Max Results</span>
-                                <TextField id="standard-basic" value={options.rssEntriesLimit} variant="standard"
-                                           sx={{width: "20%"}} onChange={(e) => {
+                                <TextField
+                                    id="standard-basic"
+                                    value={options.rssEntriesLimit}
+                                    variant="standard"
+                                    sx={{width: "30%"}}
+                                    InputProps={{
+                                        inputProps: {
+                                            type: 'number',
+                                            max: 100, min: 1
+                                        }
+                                    }}
+                                    onChange={(e) => {
                                        optionsDispatch({type: "setRSSEntriesLimit", payload: +e.target.value})
                                     }}
                                 />
@@ -134,10 +144,20 @@ function Home(){
                     <ListItem>
                         <div className={"menuItem"}>
                             <span className={"menuItemSpan"}>Columns</span>
-                            <TextField id="standard-basic" value={options.columnsPerRow} variant="standard"
-                                   sx={{width: "20%"}} onChange={(e) => {
-                                optionsDispatch({type: "setColumnCount", payload: +e.target.value})
-                            }}
+                            <TextField
+                                id="standard-basic"
+                                value={options.columnsPerRow}
+                                variant="standard"
+                                sx={{width: "30%"}}
+                                InputProps={{
+                                    inputProps: {
+                                       type: 'number',
+                                       max: 100, min: 1
+                                    }
+                                }}
+                                onChange={(e) => {
+                                    optionsDispatch({type: "setColumnCount", payload: +e.target.value})
+                                }}
                             />
                         </div>
                     </ListItem>
@@ -236,7 +256,7 @@ function RSSCard({url, position, options, optionsDispatch}){
         setGetEntriesNow(false);
         setTimeout(() => {
             setGetEntriesNow(true)
-        }, 15000); //TODO Change timer
+        }, 90000);
     }
 
     let panelsFromRSSTitles = (<></>)
