@@ -24,13 +24,13 @@ let cc = console.log;
 
 function Home(){
    const [feeds, setFeeds] = useState([{
-       url: "https://slickdeals.net/newsearch.php?mode=frontpage&searcharea=deals&searchin=first&rss=1",
+       url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
        position: 0,
    }, {
-       url: "https://slickdeals.net/newsearch.php?mode=popdeals&searcharea=deals&searchin=first&rss=1",
+       url: "http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml",
        position: 1,
    }, {
-       url: "http://feeds.feedburner.com/SlickdealsnetUP",
+       url: "http://feeds.feedburner.com/SlickdealsnetHT?format=xml",
        position: 2
    }]);
 
