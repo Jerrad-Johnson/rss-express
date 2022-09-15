@@ -1,4 +1,4 @@
-function standardizedResponse(message = "Failed to load", data = {}){
+function standardizedResponse(message = "!OK", data = {}){
     return {
         "message": message,
         "data": data,

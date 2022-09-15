@@ -2,11 +2,9 @@ const express = require('express');
 const router = express.Router();
 const axios = require("axios");
 const {XMLParser} = require("../node_modules/fast-xml-parser/src/fxp");
-/*const bodyParser = require('body-parser');*/
 const parser = new XMLParser();
 const cc = console.log;
 const cors = require('cors');
-/*router.use(bodyParser.urlencoded({ extended: true }));*/
 const commonFns = require("../utils/fns");
 const {standardizedResponse} = require("../utils/fns");
 
@@ -18,7 +16,7 @@ router.post('/getXML', async (req, res, next) => {
     let errorMessage = false;
     let feedResponse = {};
 
-    await axios.get("http://feeds.feedburner.com/SlickdealsnetFP?format=xml").then((axiosResponse) => {
+    await axios.get(req.body.feedURL).then((axiosResponse) => {
         feedResponse = axiosResponse;
     }).catch((axiosError) => {
         if (axiosError.response){
@@ -40,15 +38,8 @@ router.post('/getXML', async (req, res, next) => {
     res.locals.feedLink = req.body.feedURL;
     if (parsedResponse?.rss?.channel?.lastBuildDate) res.locals.lastUpdated = parsedResponse.rss.channel.lastBuildDate;
 
-    res.send(commonFns.standardizedResponse("Success", res.locals));
+    res.send(commonFns.standardizedResponse("OK", res.locals));
 });
-
-
-
-async function getXMLData(url){
-    let results = await axios.get(url);
-    return results;
-}
 
 module.exports = router;
 

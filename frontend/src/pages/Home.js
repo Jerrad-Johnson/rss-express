@@ -37,13 +37,13 @@ function Home(){
         left: false,
     });
 
-    const toggleDrawer = (anchor, open) => (event) => {
+/*    const toggleDrawer = (anchor, open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
         }
 
         setDrawerState({ ...drawerState, [anchor]: open });
-    };
+    };*/
 
     const optionsInitialState = {
         rssEntriesLimit: 7,
