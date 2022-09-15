@@ -67,3 +67,11 @@
 .feedTitle{
   text-align: center;
 }
+
+.basicFlex{
+  @apply
+  flex
+  justify-center
+}
+
+

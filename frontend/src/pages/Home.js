@@ -19,6 +19,7 @@ import {IconButton} from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {serverURL} from "../common/variables";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 let cc = console.log;
 
@@ -173,7 +174,7 @@ function Home(){
                         </ListItem>
                         <ListItem>
                             <div className={"menuItemButtons"}>
-                                <Button variant={"contained"}>Reload Now</Button>
+                                <Button variant={"contained"}></Button>
                             </div>
                         </ListItem>
                         <ListItem>
@@ -301,9 +302,15 @@ function RSSCard({url, position, options, optionsDispatch}){
     }
 
     let feedTitle = (
-        <Typography variant="subtitle" component="h2" className={"feedTitle"}>
-            {rssResults?.feedTitle}
-        </Typography>
+        <div className={"basicFlex"}>
+            <Typography variant="subtitle" component="h2" className={"feedTitle basicMargin"}>
+                {rssResults?.feedTitle}
+            </Typography>
+            &nbsp;
+            <RefreshIcon fontSize={"small"} onClick={(_e) => {
+                setGetEntriesNow(true)
+            }}/>
+        </div>
     )
 
     let reloadingIndicator = (<></>);
@@ -351,7 +358,8 @@ function RSSCard({url, position, options, optionsDispatch}){
 
 async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh){
     const httpClient = axios.create();
-    httpClient.defaults.timeout = 3000;
+    httpClient.defaults.timeout = 10000;
+
     let results;
     let error = false;
 

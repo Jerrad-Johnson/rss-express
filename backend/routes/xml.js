@@ -8,7 +8,7 @@ const cors = require('cors');
 const {standardizedResponse} = require("../utils/fns");
 const cc = console.log;
 
-httpClient.defaults.timeout = 100;
+httpClient.defaults.timeout = 8000;
 
 router.use(cors({
     origin: "http://localhost:3000",
