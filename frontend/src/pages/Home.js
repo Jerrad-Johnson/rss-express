@@ -330,7 +330,7 @@ function RSSCard({url, position, options, optionsDispatch}){
 
 async function getXML(url, setRSSResults, setReloading){
     let results = await axios.post(`${serverURL}/xml/getXML`, {feedURL: url});
-    setRSSResults(results.data);
+    setRSSResults(results.data.data);
     setReloading(false);
 }
 
