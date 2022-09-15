@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const axios = require("axios");
+const httpClient = axios.create();
 const {XMLParser} = require("../node_modules/fast-xml-parser/src/fxp");
 const parser = new XMLParser();
 const cors = require('cors');
 const {standardizedResponse} = require("../utils/fns");
 const cc = console.log;
+
+httpClient.defaults.timeout = 200;
 
 router.use(cors({
     origin: "http://localhost:3000",
@@ -15,7 +18,7 @@ router.post('/getXML', async (req, res, next) => {
     let errorMessage = false;
     let feedResponse = {};
 
-    await axios.get(req.body.feedURL).then((axiosResponse) => {
+    await httpClient.get(req.body.feedURL).then((axiosResponse) => {
         feedResponse = axiosResponse;
     }).catch((axiosError) => {
         errorMessage = true;
@@ -37,8 +40,8 @@ router.post('/getXML', async (req, res, next) => {
 
 
 // FOR TESTING
-/*
 
+/*
 router.get('/getXML', async (req, res, next) => {
     let errorMessage = false;
     let feedResponse = {};
@@ -68,7 +71,6 @@ router.get('/getXML', async (req, res, next) => {
 
     res.send(standardizedResponse("OK", res.locals));
 });
-
 */
 
 module.exports = router;
