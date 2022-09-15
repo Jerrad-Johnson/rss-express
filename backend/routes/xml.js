@@ -23,7 +23,7 @@ router.post('/getXML', async (req, res, next) => {
     }).catch((axiosError) => {
         if (axiosError.response){
             errorMessage = axiosError.response.status;
-        } else if (error.request){
+        } else if (axiosError.request){
             errorMessage = axiosError.request;
         }
     });
