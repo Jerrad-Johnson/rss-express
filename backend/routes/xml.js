@@ -14,20 +14,6 @@ router.use(cors({
     origin: "http://localhost:3000",
 }));
 
-/*
-router.post('/getXML', async (req, res, next) => {
-    let feedResponse = await getXMLData(req.body.feedURL);
-    let parsedResponse = parser.parse(feedResponse.data);
-
-    res.locals.entries = parsedResponse.rss.channel.item;
-    res.locals.feedTitle = parsedResponse.rss.channel.title;
-    res.locals.feedLink = req.body.feedURL;
-    if (parsedResponse?.rss?.channel?.lastBuildDate) res.locals.lastUpdated = parsedResponse.rss.channel.lastBuildDate;
-
-    res.send(commonFns.standardizedResponse("Success", res.locals));
-})
-*/
-
 router.post('/getXML', async (req, res, next) => {
     let errorMessage = false;
     let feedResponse = {};
@@ -65,27 +51,4 @@ async function getXMLData(url){
 }
 
 module.exports = router;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//res.locals.fullXMLResponse = parsedResponse;
-/*    let listOfTitles = [];
-
-    for (let i = 0; i < res.locals.entries.length; i++){
-        listOfTitles.push(res.locals.entries[i].title)
-    }*/
-
 
