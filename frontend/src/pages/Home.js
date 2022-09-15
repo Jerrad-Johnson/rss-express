@@ -1,4 +1,5 @@
 import {useReducer, useState} from "react";
+import useInterval from "../hooks/useInterval";
 import axios from "axios";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -58,6 +59,8 @@ function Home(){
                 return {...state, rssEntriesLimit: action.payload};
             case "setColumnCount":
                 return {...state, columnsPerRow: action.payload};
+            default:
+                return {...state};
         }
     }
 
@@ -98,8 +101,8 @@ function Home(){
         setOpen((prev) => !prev);
     }
 
-    const drawer = [0].map((anchor) => (
-        <>
+    const drawer = [0].map((e, k) => (
+        <div key={k}>
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -180,7 +183,7 @@ function Home(){
                         </ListItem>
                 </List>
             </Drawer>
-        </>
+        </div>
     ));
 
     return (
@@ -210,6 +213,14 @@ function RSSCard({url, position, options, optionsDispatch}){
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
     const [reloading, setReloading] = useState(false);
+    const [willRefresh, setWillRefresh] = useState(false);
+
+    useInterval(
+        () => {
+            setGetEntriesNow(true);
+        },
+        willRefresh ? 120000 : null,
+    )
 
     if (Array.isArray(rssResults.entries) && rssResults.entries.length > options.rssEntriesLimit) rssResults.entries.splice(options.rssEntriesLimit);
 
@@ -253,14 +264,13 @@ function RSSCard({url, position, options, optionsDispatch}){
         borderTop: '1px solid rgba(0, 0, 0, .125)',
     }));
 
+
+
     if (getEntriesNow === true) {
         if (rssResults !== "Loading.") setReloading(true);
-        cc(reloading)
-        getXML(url, setRSSResults, setReloading);
+        let timer = Math.trunc(Math.random() * (50 - 10) + 10) * 1000
         setGetEntriesNow(false);
-        setTimeout(() => {
-            setGetEntriesNow(true)
-        }, 90000);
+        getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh);
     }
 
     let panelsFromRSSTitles = (<></>)
@@ -268,7 +278,7 @@ function RSSCard({url, position, options, optionsDispatch}){
     if (Array.isArray(rssResults.entries) && rssResults.entries.length > 0){
         panelsFromRSSTitles = rssResults.entries.map((e, k) => {
             return (
-                <>
+                <div key={k}>
                     <Accordion expanded={expanded === `panel${k}`} onChange={handleChange(`panel${k}`)}>
                         <AccordionSummary
                             aria-controls={`panel${k}bh-content`}
@@ -284,7 +294,7 @@ function RSSCard({url, position, options, optionsDispatch}){
                             </AccordionDetails>
                         </a>
                     </Accordion>
-                </>
+                </div>
             );
         });
     }
@@ -297,6 +307,8 @@ function RSSCard({url, position, options, optionsDispatch}){
 
     let reloadingIndicator = (<></>);
 
+
+    //TODO Add logic to show red if load errored.
     if (reloading === true){
         reloadingIndicator = (
             <div className={"reloadingIndicator"}>
@@ -306,12 +318,13 @@ function RSSCard({url, position, options, optionsDispatch}){
     } else {
         reloadingIndicator = (
             <div className={"reloadingIndicator"}>
-                <LinearProgress variant="determinate" value="100" />
+                <LinearProgress variant="determinate" value={100} />
             </div>
         );
     }
 
     let columnPerRowCalculation = (100/options.columnsPerRow) + "%";
+
 
     return (
       <>
@@ -328,10 +341,11 @@ function RSSCard({url, position, options, optionsDispatch}){
     );
 }
 
-async function getXML(url, setRSSResults, setReloading){
+async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh){
     let results = await axios.post(`${serverURL}/xml/getXML`, {feedURL: url});
     setRSSResults(results.data.data);
     setReloading(false);
+    if (!willRefresh) setWillRefresh(true);
 }
 
 export default Home;

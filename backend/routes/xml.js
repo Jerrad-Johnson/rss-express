@@ -3,10 +3,9 @@ const router = express.Router();
 const axios = require("axios");
 const {XMLParser} = require("../node_modules/fast-xml-parser/src/fxp");
 const parser = new XMLParser();
-const cc = console.log;
 const cors = require('cors');
-const commonFns = require("../utils/fns");
 const {standardizedResponse} = require("../utils/fns");
+const cc = console.log;
 
 router.use(cors({
     origin: "http://localhost:3000",
@@ -38,7 +37,7 @@ router.post('/getXML', async (req, res, next) => {
     res.locals.feedLink = req.body.feedURL;
     if (parsedResponse?.rss?.channel?.lastBuildDate) res.locals.lastUpdated = parsedResponse.rss.channel.lastBuildDate;
 
-    res.send(commonFns.standardizedResponse("OK", res.locals));
+    res.send(standardizedResponse("OK", res.locals));
 });
 
 module.exports = router;
