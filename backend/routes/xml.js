@@ -18,12 +18,41 @@ router.post('/getXML', async (req, res, next) => {
     await axios.get(req.body.feedURL).then((axiosResponse) => {
         feedResponse = axiosResponse;
     }).catch((axiosError) => {
-        if (axiosError.response){
-            errorMessage = axiosError.response.status;
-        } else if (axiosError.request){
-            errorMessage = axiosError.request;
-        }
+        errorMessage = true;
+        res.send({status: 500, message: axiosError});
     });
+
+    if (errorMessage === true) return;
+
+    let parsedResponse = parser.parse(feedResponse.data);
+
+    res.locals.entries = parsedResponse.rss.channel.item;
+    res.locals.feedTitle = parsedResponse.rss.channel.title;
+    res.locals.feedLink = req.body.feedURL;
+    if (parsedResponse?.rss?.channel?.lastBuildDate) res.locals.lastUpdated = parsedResponse.rss.channel.lastBuildDate;
+
+    res.send(standardizedResponse("OK", res.locals));
+});
+
+
+
+// FOR TESTING
+/*
+
+router.get('/getXML', async (req, res, next) => {
+    let errorMessage = false;
+    let feedResponse = {};
+
+    await axios.get("http://feeds.feedbdwaurner.com/SlickdealsnetFP?format=xml").then((axiosResponse) => {
+        feedResponse = axiosResponse;
+    }).catch((axiosError) => {
+        errorMessage = true;
+        res.send({status: 500, message: axiosError});
+    });
+
+    if (errorMessage === true) return;
+
+    res.send(errorMessage);
 
     if (errorMessage !== false){
         res.send(standardizedResponse("!OK", errorMessage));
@@ -39,6 +68,8 @@ router.post('/getXML', async (req, res, next) => {
 
     res.send(standardizedResponse("OK", res.locals));
 });
+
+*/
 
 module.exports = router;
 
