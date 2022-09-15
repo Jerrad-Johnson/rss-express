@@ -212,8 +212,9 @@ function RSSCard({url, position, options, optionsDispatch}){
     const [rssResults, setRSSResults] = useState("Loading.");
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
-    const [reloading, setReloading] = useState(false);
+    const [reloading, setReloading] = useState("no");
     const [willRefresh, setWillRefresh] = useState(false);
+
 
     useInterval(
         () => {
@@ -222,7 +223,7 @@ function RSSCard({url, position, options, optionsDispatch}){
         willRefresh ? 120000 : null,
     )
 
-    if (Array.isArray(rssResults.entries) && rssResults.entries.length > options.rssEntriesLimit) rssResults.entries.splice(options.rssEntriesLimit);
+    if (Array.isArray(rssResults?.entries) && rssResults?.entries?.length > options.rssEntriesLimit) rssResults.entries.splice(options.rssEntriesLimit);
 
     const handleChange = (panel) => (event, isExpanded) => {
             setExpanded(isExpanded ? panel : false);
@@ -267,7 +268,7 @@ function RSSCard({url, position, options, optionsDispatch}){
 
 
     if (getEntriesNow === true) {
-        if (rssResults !== "Loading.") setReloading(true);
+        if (rssResults !== "Loading.") setReloading("yes");
         let timer = Math.trunc(Math.random() * (50 - 10) + 10) * 1000
         setGetEntriesNow(false);
         getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh);
@@ -275,7 +276,7 @@ function RSSCard({url, position, options, optionsDispatch}){
 
     let panelsFromRSSTitles = (<></>)
 
-    if (Array.isArray(rssResults.entries) && rssResults.entries.length > 0){
+    if (Array.isArray(rssResults?.entries) && rssResults?.entries?.length > 0){
         panelsFromRSSTitles = rssResults.entries.map((e, k) => {
             return (
                 <div key={k}>
@@ -301,7 +302,7 @@ function RSSCard({url, position, options, optionsDispatch}){
 
     let feedTitle = (
         <Typography variant="subtitle" component="h2" className={"feedTitle"}>
-            {rssResults.feedTitle}
+            {rssResults?.feedTitle}
         </Typography>
     )
 
@@ -309,16 +310,23 @@ function RSSCard({url, position, options, optionsDispatch}){
 
 
     //TODO Add logic to show red if load errored.
-    if (reloading === true){
+    if (reloading === "yes"){
         reloadingIndicator = (
             <div className={"reloadingIndicator"}>
                 <LinearProgress/>
             </div>
         );
-    } else {
+    } else if (reloading === "no"){
         reloadingIndicator = (
             <div className={"reloadingIndicator"}>
                 <LinearProgress variant="determinate" value={100} />
+            </div>
+        );
+    } else if (reloading === "error"){
+        reloadingIndicator = (
+            <div className={"reloadingIndicator"}>
+                <LinearProgress variant="determinate" value={100} sx={{
+                    "& .MuiLinearProgress-bar": { backgroundColor: `rgb(255,0,0,.4)`} }}/>
             </div>
         );
     }
@@ -342,9 +350,25 @@ function RSSCard({url, position, options, optionsDispatch}){
 }
 
 async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh){
-    let results = await axios.post(`${serverURL}/xml/getXML`, {feedURL: url});
+    const httpClient = axios.create();
+    httpClient.defaults.timeout = 3000;
+    let results;
+    let error = false;
+
+    try {
+        results = await httpClient.post(`${serverURL}/xml/getXML`, {feedURL: url});
+    } catch (e){
+        cc(e)
+        error = true;
+    }
+
+    if (error === true || !results?.data){
+        setReloading("error");
+        return;
+    }
+
     setRSSResults(results.data.data);
-    setReloading(false);
+    setReloading("no");
     if (!willRefresh) setWillRefresh(true);
 }
 

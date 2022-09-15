@@ -1,7 +1,8 @@
-function standardizedResponse(message = "!OK", data = {}){
+function standardizedResponse(status = 500, data = {}, message = {}){
     return {
-        "message": message,
+        "status": status,
         "data": data,
+        "message": message,
     }
 }
 

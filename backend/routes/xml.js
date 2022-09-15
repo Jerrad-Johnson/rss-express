@@ -8,7 +8,7 @@ const cors = require('cors');
 const {standardizedResponse} = require("../utils/fns");
 const cc = console.log;
 
-httpClient.defaults.timeout = 200;
+httpClient.defaults.timeout = 100;
 
 router.use(cors({
     origin: "http://localhost:3000",
@@ -22,10 +22,16 @@ router.post('/getXML', async (req, res, next) => {
         feedResponse = axiosResponse;
     }).catch((axiosError) => {
         errorMessage = true;
-        res.send({status: 500, message: axiosError});
+        res.status(500);
+        res.send();
     });
 
     if (errorMessage === true) return;
+
+    if (!feedResponse?.data){
+        res.send({status: 500});
+        return;
+    }
 
     let parsedResponse = parser.parse(feedResponse.data);
 
@@ -34,7 +40,7 @@ router.post('/getXML', async (req, res, next) => {
     res.locals.feedLink = req.body.feedURL;
     if (parsedResponse?.rss?.channel?.lastBuildDate) res.locals.lastUpdated = parsedResponse.rss.channel.lastBuildDate;
 
-    res.send(standardizedResponse("OK", res.locals));
+    res.send(standardizedResponse(200, res.locals));
 });
 
 
