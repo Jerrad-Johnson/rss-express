@@ -210,11 +210,11 @@ function Home(){
 }
 
 function RSSCard({url, position, options, optionsDispatch}){
-    const loadingStateOptions = { notLoading: "not-loading", loading: "loading", error: "error-loading" }
-    const [rssResults, setRSSResults] = useState("Loading.");
+    const [rssResults, setRSSResults] = useState(undefined);
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
-    const [reloading, setReloading] = useState(loadingStateOptions.notLoading); // Possible states: "error" "yes" "no"
+    const loadingStateOptions = { notLoading: "not-loading", loading: "loading", error: "error-loading" }
+    const [reloading, setReloading] = useState(loadingStateOptions.notLoading);
     const [willRefresh, setWillRefresh] = useState(false);
 
 
@@ -270,8 +270,7 @@ function RSSCard({url, position, options, optionsDispatch}){
 
 
     if (getEntriesNow === true) {
-        if (rssResults !== "Loading.") setReloading(loadingStateOptions.loading);
-        let timer = Math.trunc(Math.random() * (50 - 10) + 10) * 1000
+        if (rssResults !== undefined) setReloading(loadingStateOptions.loading);
         setGetEntriesNow(false);
         getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh, loadingStateOptions);
     }
@@ -347,8 +346,8 @@ function RSSCard({url, position, options, optionsDispatch}){
       <div className={"rssCardContainer"} style={{flex: columnPerRowCalculation}}>
           <>
             {feedTitle}
-            {rssResults === "Loading." && <CircularProgress/>}
-            {rssResults !== "Loading." && panelsFromRSSTitles}
+            {rssResults === undefined && <CircularProgress/>}
+            {rssResults !== undefined && panelsFromRSSTitles}
 
             {reloadingIndicator}
           </>
