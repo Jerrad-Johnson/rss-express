@@ -1,5 +1,5 @@
 import axios from "axios";
-import {durationToTimeout} from "./variables";
+export const durationToTimeout = 10000;
 
 const httpClient = axios.create();
 httpClient.defaults.timeout = durationToTimeout;

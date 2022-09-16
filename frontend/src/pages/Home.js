@@ -217,7 +217,6 @@ function RSSCard({url, position, options, optionsDispatch}){
     const [reloading, setReloading] = useState(loadingStateOptions.notLoading);
     const [willRefresh, setWillRefresh] = useState(false);
 
-
     useInterval(
         () => {
             setGetEntriesNow(true);
@@ -362,6 +361,7 @@ async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefr
 
     try {
         results = await httpClient.post(`${serverURL}/xml/getXML`, {feedURL: url});
+        cc(results)
     } catch (e){
         cc(e)
         error = true;
