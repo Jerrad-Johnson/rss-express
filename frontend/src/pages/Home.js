@@ -1,7 +1,6 @@
 import {useReducer, useState} from "react";
 import useInterval from "../hooks/useInterval";
-import axios from "axios";
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
@@ -18,8 +17,9 @@ import ListItem from '@mui/material/ListItem';
 import {IconButton} from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import {serverURL} from "../common/variables";
+import {serverURL, durationToTimeout} from "../common/variables";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import httpClient from "../common/httpClient";
 
 let cc = console.log;
 
@@ -210,10 +210,11 @@ function Home(){
 }
 
 function RSSCard({url, position, options, optionsDispatch}){
+    const loadingStateOptions = { notLoading: "not-loading", loading: "loading", error: "error-loading" }
     const [rssResults, setRSSResults] = useState("Loading.");
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
-    const [reloading, setReloading] = useState("no");
+    const [reloading, setReloading] = useState(loadingStateOptions.notLoading); // Possible states: "error" "yes" "no"
     const [willRefresh, setWillRefresh] = useState(false);
 
 
@@ -269,10 +270,10 @@ function RSSCard({url, position, options, optionsDispatch}){
 
 
     if (getEntriesNow === true) {
-        if (rssResults !== "Loading.") setReloading("yes");
+        if (rssResults !== "Loading.") setReloading(loadingStateOptions.loading);
         let timer = Math.trunc(Math.random() * (50 - 10) + 10) * 1000
         setGetEntriesNow(false);
-        getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh);
+        getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh, loadingStateOptions);
     }
 
     let panelsFromRSSTitles = (<></>)
@@ -317,19 +318,19 @@ function RSSCard({url, position, options, optionsDispatch}){
 
 
     //TODO Add logic to show red if load errored.
-    if (reloading === "yes"){
+    if (reloading === loadingStateOptions.loading){
         reloadingIndicator = (
             <div className={"reloadingIndicator"}>
                 <LinearProgress/>
             </div>
         );
-    } else if (reloading === "no"){
+    } else if (reloading === loadingStateOptions.notLoading){
         reloadingIndicator = (
             <div className={"reloadingIndicator"}>
                 <LinearProgress variant="determinate" value={100} />
             </div>
         );
-    } else if (reloading === "error"){
+    } else if (reloading === loadingStateOptions.error){
         reloadingIndicator = (
             <div className={"reloadingIndicator"}>
                 <LinearProgress variant="determinate" value={100} sx={{
@@ -356,10 +357,7 @@ function RSSCard({url, position, options, optionsDispatch}){
     );
 }
 
-async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh){
-    const httpClient = axios.create();
-    httpClient.defaults.timeout = 10000;
-
+async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh, loadingStateOptions){
     let results;
     let error = false;
 
@@ -371,12 +369,12 @@ async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefr
     }
 
     if (error === true || !results?.data){
-        setReloading("error");
+        setReloading(loadingStateOptions.error);
         return;
     }
 
     setRSSResults(results.data.data);
-    setReloading("no");
+    setReloading(loadingStateOptions.notLoading);
     if (!willRefresh) setWillRefresh(true);
 }
 
