@@ -3,3 +3,4 @@
 
 # production
 /build
+/common/auth0config.js
