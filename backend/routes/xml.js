@@ -1,14 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const axios = require("axios");
-const httpClient = axios.create();
-const {XMLParser} = require("../node_modules/fast-xml-parser/src/fxp");
-const parser = new XMLParser();
+const {standardizedResponse, genericError, parser, router} = require("../utils/fns");
+const {httpClient} = require("../common/httpClient");
 const cors = require('cors');
-const {standardizedResponse, genericError} = require("../utils/fns");
 const cc = console.log;
-
-httpClient.defaults.timeout = 8000;
 
 router.use(cors({
     origin: "http://localhost:3000",
