@@ -5,5 +5,5 @@ const cc = console.log;
 
 exports.xmlControllerGet = async (req, res) => {
     let feedResponse = await getXML(req, res);
-    parseXML(req, res, feedResponse);
+    if (feedResponse?.data) parseXML(req, res, feedResponse);
 }
