@@ -23,7 +23,7 @@ import httpClient from "../common/httpClient";
 
 let cc = console.log;
 
-function Home(){
+function Home({theme}){
    const [feeds, setFeeds] = useState([{
        url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
        position: 0,
@@ -64,12 +64,6 @@ function Home(){
                 return {...state};
         }
     }
-
-    const theme = createTheme({
-        palette: {
-            mode: 'dark',
-        },
-    });
 
     let feedDOMCards = feeds.map((e) => {
         return (
@@ -188,24 +182,23 @@ function Home(){
     ));
 
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-                <div className={"mainContainer"}>
-                    <div className={"rssContainer"}>
-                        {feedDOMCards}
-                    </div>
-
-                <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerToggle}
-                    edge="start"
-                    sx={{ mr: 2 }}
-                >Options</IconButton>
-
+        <>
+            <div className={"mainContainer"}>
+                <div className={"rssContainer"}>
+                    {feedDOMCards}
                 </div>
+
+            <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerToggle}
+                edge="start"
+                sx={{ mr: 2 }}
+            >Options</IconButton>
+
+            </div>
             {drawer}
-        </ThemeProvider>
+        </>
     )
 }
 
