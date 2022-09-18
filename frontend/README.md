@@ -8,6 +8,21 @@ Navigate to /frontend and run `npm install`
 
 Navigate to /backend and run `npm install`
 
+Create `connection.js` in `backend/common`, then insert and alter this as appropriate:
+```
+const mysql = require("mysql");
+
+var pool = mysql.createPool({
+    connectionLimit : 10,
+    host: 'localhost',
+    port: 3306,
+    user: 'rss-express-admin',
+    password: '***',
+    database: 'rss-express',
+});
+
+exports.pool = pool;
+```
 ## Database Setup
 
 ```CREATE DATABASE rss-express;```

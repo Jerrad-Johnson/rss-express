@@ -6,7 +6,7 @@ exports.checkLogin = (req, res) => {
 
     pool.query('SELECT * FROM users', (err, results, fields) => {
         //cc(err)
-        cc(results)
+        //cc(results)
         //cc(fields)
     });
 }
