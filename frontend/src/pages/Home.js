@@ -306,7 +306,7 @@ function RSSCard({url, position, options, optionsDispatch, feeds, setFeeds, card
     let feedTitle = (
         <div className={"basicFlex"}>
             <ArrowLeft onClick={(e) => {
-                handleMoveCard(position, cardDirections.left, cardDirections, feeds, setFeeds, setRSSResults);
+                handleMoveCard(position, cardDirections.left, cardDirections, feeds, setFeeds);
             }}/>
             <Typography variant="subtitle" component="h2" className={"feedTitle basicMargin"}>
                 {rssResults?.feedTitle}
@@ -316,7 +316,7 @@ function RSSCard({url, position, options, optionsDispatch, feeds, setFeeds, card
                 setGetEntriesNow(true)
             }}/>
             <ArrowRight onClick={(e) => {
-                handleMoveCard(position, cardDirections.right, cardDirections, feeds, setFeeds, setRSSResults);
+                handleMoveCard(position, cardDirections.right, cardDirections, feeds, setFeeds);
             }}/>
         </div>
     )
@@ -385,8 +385,8 @@ async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefr
     if (!willRefresh) setWillRefresh(true);
 }
 
-function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, setFeeds, setRSSResults){
-    let newFeedsArray = JSON.parse(JSON.stringify(feeds));
+function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, setFeeds){
+    let newFeedsArray = [...feeds];
 
     const changeValueBasedOnDirection = {
         left: -1,
@@ -400,13 +400,11 @@ function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, se
     ){
 
         let originallyRightEntry = newFeedsArray[itemPosition];
-
         let originallyLeftEntry = newFeedsArray[itemPosition + changeValueBasedOnDirection[directionToMove]];
 
         newFeedsArray[itemPosition + changeValueBasedOnDirection[directionToMove]] = originallyRightEntry;
         newFeedsArray[itemPosition] = originallyLeftEntry;
     }
-
 
     setFeeds(newFeedsArray);
 }

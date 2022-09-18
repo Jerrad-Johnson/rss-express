@@ -1,10 +1,9 @@
 const {router} = require("../utils/fns");
 const {xmlControllerGet} = require("../controllers/xmlControllerGet");
-const cors = require('cors');
-const corsSettings = require('../common/corsSettings');
+const {corsDecorated} = require("../common/decorators");
 const cc = console.log;
 
-router.use(cors(corsSettings));
+router.use(corsDecorated);
 
 router.post('/getXML', xmlControllerGet);
 

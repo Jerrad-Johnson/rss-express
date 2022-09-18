@@ -8,7 +8,7 @@ Navigate to /frontend and run `npm install`
 
 Navigate to /backend and run `npm install`
 
-Create `connection.js` in `backend/common`, then insert and alter this as appropriate:
+Create `pool.js` in `backend/common`, then insert and alter this as appropriate:
 ```
 const mysql = require("mysql");
 
