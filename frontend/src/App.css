@@ -76,14 +76,25 @@
 
 .loginContainer{
   margin: auto;
-  width: 500px;
+  max-width: 500px;
   background-color: rgba(255, 255, 255, .05);
-  text-align:center;
+  text-align: center;
   outline-color: rgba(255, 255, 255, .2);
   outline-width: 1px;
   outline-style: solid;
 
   @apply
   mt-8
-  p-4
+  p-6
+}
+
+.evenly{
+  @apply
+  flex
+  justify-evenly
+}
+
+.top-margin{
+  @apply
+  mt-6
 }
