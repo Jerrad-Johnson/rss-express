@@ -1,5 +1,5 @@
-const {genericSQLPromise} = require("../../utils/fns");
 const {errorExistsInScript, errorExistsNotInScript} = require("../../common/variables");
+const {genericSQLPromise} = require("../../common/queries");
 const cc = console.log;
 
 exports.doesUserExist = async (req, res) => {

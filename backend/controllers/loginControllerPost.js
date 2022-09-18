@@ -12,13 +12,7 @@ exports.loginControllerPost = async (req, res) => {
     if (!results.data?.[0]){
         results = await createUser(req, res);
         if (results.error === errorExistsInScript) return;
-
     }
 
-
-
-    //cc(results.data[0].email);
-
-
-
+    //SESSION
 }

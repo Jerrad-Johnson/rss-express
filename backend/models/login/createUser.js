@@ -1,4 +1,4 @@
-const {genericSQLPromise} = require("../../utils/fns");
+const {genericSQLPromise} = require("../../common/queries");
 const {errorExistsInScript, errorExistsNotInScript} = require("../../common/variables");
 const cc = console.log;
 
