@@ -3,6 +3,8 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import {useState} from "react";
+import httpClient from "../common/httpClient";
+import {serverURL} from "../common/variables";
 
 
 export default function Login(){
@@ -38,6 +40,18 @@ export default function Login(){
     )
 }
 
-function handleLogin(email){
+async function handleLogin(email) {
+    if (!validateEmail(email)) return; //TOAST
+    let result = await httpClient.post(serverURL + "/login", email);
+    if (result.message === "Success") window.location.href = "/";
+    return; // TOAST
 
+}
+
+function validateEmail(email){
+    return String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
 }

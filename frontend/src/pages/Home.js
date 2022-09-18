@@ -27,13 +27,10 @@ function Home(){
 
    const feedsFromDatabase = [{
            url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
-           position: 0,
        }, {
         url: "http://feeds.feedburner.com/SlickdealsnetHT?format=xml",
-            position: 1,
     }, {
         url: "http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml",
-            position: 2
     }];
 
    const cardDirections = {
@@ -77,7 +74,7 @@ function Home(){
         return (
             <RSSCard key={e.url}
                      url={e.url}
-                     position={e.position}
+                     position={k}
                      options = {options}
                      optionsDispatch = {optionsDispatch}
                      feeds = {feeds}
@@ -307,7 +304,6 @@ function RSSCard({url, position, options, optionsDispatch, feeds, setFeeds, card
     let feedTitle = (
         <div className={"basicFlex"}>
             <ArrowLeft onClick={(e) => {
-                cc(feeds);
                 handleMoveCard(position, cardDirections.left, cardDirections, feeds, setFeeds, setRSSResults);
             }}/>
             <Typography variant="subtitle" component="h2" className={"feedTitle basicMargin"}>
@@ -372,7 +368,6 @@ async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefr
 
     try {
         results = await httpClient.post(`${serverURL}/xml/getXML`, {feedURL: url});
-        cc(results)
     } catch (e){
         cc(e)
         error = true;
@@ -391,7 +386,7 @@ async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefr
 function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, setFeeds, setRSSResults){
     let newFeedsArray = JSON.parse(JSON.stringify(feeds));
 
-    let changeValueBasedOnDirection = {
+    const changeValueBasedOnDirection = {
         left: -1,
         right: +1,
     }
@@ -403,10 +398,8 @@ function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, se
     ){
 
         let originallyRightEntry = newFeedsArray[itemPosition];
-        originallyRightEntry.position = itemPosition + changeValueBasedOnDirection[directionToMove];
 
         let originallyLeftEntry = newFeedsArray[itemPosition + changeValueBasedOnDirection[directionToMove]];
-        originallyLeftEntry.position = itemPosition;
 
         newFeedsArray[itemPosition + changeValueBasedOnDirection[directionToMove]] = originallyRightEntry;
         newFeedsArray[itemPosition] = originallyLeftEntry;
@@ -415,7 +408,5 @@ function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, se
 
     setFeeds(newFeedsArray);
 }
-
-
 
 export default Home;
