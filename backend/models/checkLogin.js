@@ -1,12 +1,20 @@
 const {pool} = require("../common/pool");
+const {genericError, genericSQLErrorCheck, genericSQLPromise} = require("../utils/fns");
+const {errorExistsInScript, errorExistsNotInScript} = require("../common/variables");
 const cc = console.log;
 
-exports.checkLogin = (req, res) => {
-    pool.query('INSERT INTO users(email, user_id) VALUES("test@test.com", 9001)');
+exports.doesUserExist = async (req, res, email) => {
+    let didError = errorExistsNotInScript;
+    let query = 'SELECT email FROM users WHERE email = ?';
 
-    pool.query('SELECT * FROM users', (err, results, fields) => {
-        //cc(err)
-        //cc(results)
-        //cc(fields)
-    });
+    results = await genericSQLPromise(query, email, res);
+    if (results.error === errorExistsInScript) return errorExistsInScript;
+
+    return results;
+
+    /*query = 'INSERT INTO users(email) VALUES (?)';
+    didError = await genericSQLPromise(query, email, res);
+    if (didError) return errorExistsInScript;*/
+
+
 }

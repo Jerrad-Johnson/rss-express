@@ -57,7 +57,7 @@ async function handleLogin(email) {
 }
 
 async function getLogin(email){
-    return await httpClient.post(serverURL + "/login", email);
+    return await httpClient.post(serverURL + "/login", {"email": email});
 }
 
 function validateEmail(email){
