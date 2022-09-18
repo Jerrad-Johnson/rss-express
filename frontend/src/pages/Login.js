@@ -6,7 +6,6 @@ import {useState} from "react";
 import httpClient from "../common/httpClient";
 import {defaultToastPromiseMessages, errorStrings, responseStrings, serverURL} from "../common/variables";
 import toast, {Toaster} from "react-hot-toast";
-import {toastStyle} from "../common/variables";
 import {toastDecorated, toastDecoratedPromise} from "../common/fns";
 
 let cc = console.log;
