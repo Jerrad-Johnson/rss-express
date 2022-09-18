@@ -5,11 +5,9 @@ import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
-import {CircularProgress, LinearProgress, TextField} from "@mui/material";
+import {CircularProgress, LinearProgress, TextField, useTheme} from "@mui/material";
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
@@ -20,20 +18,30 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {serverURL, durationToTimeout} from "../common/variables";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import httpClient from "../common/httpClient";
+import {ArrowLeft, ArrowRight} from "@mui/icons-material";
 
 let cc = console.log;
 
-function Home({theme}){
-   const [feeds, setFeeds] = useState([{
-       url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
-       position: 0,
-   }, {
-       url: "http://feeds.feedburner.com/SlickdealsnetHT?format=xml",
-       position: 1,
-   }, {
-       url: "http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml",
-       position: 2
-   }]);
+function Home(){
+   const theme = useTheme();
+
+   const feedsFromDatabase = [{
+           url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
+           position: 0,
+       }, {
+        url: "http://feeds.feedburner.com/SlickdealsnetHT?format=xml",
+            position: 1,
+    }, {
+        url: "http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml",
+            position: 2
+    }];
+
+   const cardDirections = {
+       left: "left",
+       right: "right",
+   }
+
+   const [feeds, setFeeds] = useState(feedsFromDatabase);
 
    const [drawerState, setDrawerState] = useState({
         left: false,
@@ -65,13 +73,16 @@ function Home({theme}){
         }
     }
 
-    let feedDOMCards = feeds.map((e) => {
+    let feedDOMCards = feeds.map((e, k) => {
         return (
-            <RSSCard key={e.position}
+            <RSSCard key={e.url}
                      url={e.url}
                      position={e.position}
                      options = {options}
                      optionsDispatch = {optionsDispatch}
+                     feeds = {feeds}
+                     setFeeds={setFeeds}
+                     cardDirections={cardDirections}
             />
         )
     });
@@ -168,7 +179,7 @@ function Home({theme}){
                         </ListItem>
                         <ListItem>
                             <div className={"menuItemButtons"}>
-                                <Button variant={"contained"}></Button>
+                                <Button variant={"contained"}>Save Positions</Button>
                             </div>
                         </ListItem>
                         <ListItem>
@@ -202,7 +213,7 @@ function Home({theme}){
     )
 }
 
-function RSSCard({url, position, options, optionsDispatch}){
+function RSSCard({url, position, options, optionsDispatch, feeds, setFeeds, cardDirections}){
     const [rssResults, setRSSResults] = useState(undefined);
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
@@ -295,12 +306,19 @@ function RSSCard({url, position, options, optionsDispatch}){
 
     let feedTitle = (
         <div className={"basicFlex"}>
+            <ArrowLeft onClick={(e) => {
+                cc(feeds);
+                handleMoveCard(position, cardDirections.left, cardDirections, feeds, setFeeds, setRSSResults);
+            }}/>
             <Typography variant="subtitle" component="h2" className={"feedTitle basicMargin"}>
                 {rssResults?.feedTitle}
             </Typography>
             &nbsp;
             <RefreshIcon fontSize={"small"} onClick={(_e) => {
                 setGetEntriesNow(true)
+            }}/>
+            <ArrowRight onClick={(e) => {
+                handleMoveCard(position, cardDirections.right, cardDirections, feeds, setFeeds, setRSSResults);
             }}/>
         </div>
     )
@@ -369,5 +387,35 @@ async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefr
     setReloading(loadingStateOptions.notLoading);
     if (!willRefresh) setWillRefresh(true);
 }
+
+function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, setFeeds, setRSSResults){
+    let newFeedsArray = JSON.parse(JSON.stringify(feeds));
+
+    let changeValueBasedOnDirection = {
+        left: -1,
+        right: +1,
+    }
+
+    if (
+        ((directionToMove === cardDirections.left) && (itemPosition > 0))
+        ||
+        ((directionToMove === cardDirections.right) && (itemPosition < feeds.length-1))
+    ){
+
+        let originallyRightEntry = newFeedsArray[itemPosition];
+        originallyRightEntry.position = itemPosition + changeValueBasedOnDirection[directionToMove];
+
+        let originallyLeftEntry = newFeedsArray[itemPosition + changeValueBasedOnDirection[directionToMove]];
+        originallyLeftEntry.position = itemPosition;
+
+        newFeedsArray[itemPosition + changeValueBasedOnDirection[directionToMove]] = originallyRightEntry;
+        newFeedsArray[itemPosition] = originallyLeftEntry;
+    }
+
+
+    setFeeds(newFeedsArray);
+}
+
+
 
 export default Home;

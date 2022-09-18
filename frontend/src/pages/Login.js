@@ -1,4 +1,4 @@
-import {Box, Card, Container, Paper, TextField} from "@mui/material";
+import {Box, Card, Container, Paper, TextField, useTheme} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
@@ -7,6 +7,7 @@ import {useState} from "react";
 
 export default function Login(){
     const [email, setEmail] = useState("");
+    const theme = useTheme();
 
     return (
         <div className={"loginContainer"}>

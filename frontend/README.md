@@ -1,28 +1,46 @@
 # RSS-Reader. 
 
+## Frontend Setup
+
+Navigate to /frontend and run `npm install`
+
+## Backend Setup
+
+Navigate to /backend and run `npm install`
+
 ## Database Setup
 
 ```CREATE DATABASE rss-express;```
 
-Create user and grant privileges.
+Create user, and then grant privileges:
+
+```
+GRANT ALL PRIVILEGES ON `rss-express`.* TO 'rss-express-admin'@'localhost' WITH GRANT OPTION;
+```
 
 ```
 CREATE TABLE users (
 email VARCHAR(80) UNIQUE NOT NULL,
-user_id INT(8) UNIQUE PRIMARY KEY AUTO_INCREMENT
+id INT(8) UNIQUE NOT NULL PRIMARY KEY AUTO_INCREMENT
 );
 
 CREATE TABLE options (
-id INT(8) PRIMARY KEY NOT NULL,
-columns_displayed INT(2),
-max_results_per_column INT(2)
+user_id INT(8) NOT NULL,
+id INT(20) UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
+columns_displayed INT(2) NOT NULL,
+max_results_per_column INT(2) NOT NULL
 );
 
 CREATE TABLE feeds (
-id INT(8) PRIMARY KEY NOT NULL,
-feed_url VARCHAR(510),
-feed_position_in_dom INT(2)
+user_id INT(8) NOT NULL,
+id INT(20) PRIMARY KEY UNIQUE NOT NULL AUTO_INCREMENT,
+feed_url VARCHAR(510) NOT NULL,
+feed_position_in_dom INT(2) NOT NULL,
 );
+
+ALTER TABLE feeds ADD UNIQUE INDEX id_url (user_id, feed_url);
+ALTER TABLE feeds ADD UNIQUE INDEX id_position (user_id, feed_position_in_dom);
+
 ```
 
    

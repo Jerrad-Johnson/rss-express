@@ -20,11 +20,10 @@ function App() {
         <BrowserRouter>
               <Routes>
                           <Route path={"/"} element={<Home
-                              theme = {theme}/>}/>
+                             />}/>
 
                           <Route path={"/login"} element={<Login
-                              theme = {theme}
-                          />}/>
+                            />}/>
               </Routes>
         </BrowserRouter>
       </ThemeProvider>
