@@ -5,3 +5,4 @@
 /build
 /common/auth0config.js
 /common/connection.js
+/common/pool.js

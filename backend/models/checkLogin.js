@@ -1,4 +1,4 @@
-const {pool} = require("../common/connection");
+const {pool} = require("../common/pool");
 const cc = console.log;
 
 exports.checkLogin = (req, res) => {
