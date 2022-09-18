@@ -4,8 +4,12 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import {useState} from "react";
 import httpClient from "../common/httpClient";
-import {serverURL} from "../common/variables";
+import {defaultToastPromiseMessages, errorStrings, responseStrings, serverURL} from "../common/variables";
+import toast, {Toaster} from "react-hot-toast";
+import {toastStyle} from "../common/variables";
+import {toastDecorated, toastDecoratedPromise} from "../common/fns";
 
+let cc = console.log;
 
 export default function Login(){
     const [email, setEmail] = useState("");
@@ -13,6 +17,9 @@ export default function Login(){
 
     return (
         <div className={"loginContainer"}>
+            <Toaster
+            position={"bottom-center"
+            }/>
             <Typography variant={"h4"} component={"h1"}>
                 Login
             </Typography>
@@ -41,11 +48,17 @@ export default function Login(){
 }
 
 async function handleLogin(email) {
-    if (!validateEmail(email)) return; //TOAST
-    let result = await httpClient.post(serverURL + "/login", email);
-    if (result.message === "Success") window.location.href = "/";
-    return; // TOAST
+    if (!validateEmail(email)) {
+        toastDecorated(responseStrings.invalidEmail)
+        return;
+    }
 
+    let result = await toastDecoratedPromise(getLogin(email), defaultToastPromiseMessages);
+    if (result.message === responseStrings.success) window.location.href = "/";
+}
+
+async function getLogin(email){
+    return await httpClient.post(serverURL + "/login", email);
 }
 
 function validateEmail(email){

@@ -19,6 +19,7 @@ import {serverURL, durationToTimeout} from "../common/variables";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import httpClient from "../common/httpClient";
 import {ArrowLeft, ArrowRight} from "@mui/icons-material";
+import Toaster from "react-hot-toast";
 
 let cc = console.log;
 
@@ -192,6 +193,7 @@ function Home(){
     return (
         <>
             <div className={"mainContainer"}>
+                <Toaster/>
                 <div className={"rssContainer"}>
                     {feedDOMCards}
                 </div>
