@@ -8,9 +8,4 @@ exports.xmlControllerGet = async (req, res) => {
     if (!feedResponse?.data) return;
     parseXML(req, res, feedResponse);
     res.send(standardizedResponse("", res.locals));
-
-    /*if (feedResponse?.data){
-        parseXML(req, res, feedResponse);
-        res.send(standardizedResponse("", res.locals));
-    }*/
 }

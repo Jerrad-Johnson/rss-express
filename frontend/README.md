@@ -2,14 +2,15 @@
 
 ## Database Setup
 
-CREATE DATABASE rss-express;
+```CREATE DATABASE rss-express;```
 
+Create user and grant privileges.
+
+```
 CREATE TABLE users (
 email VARCHAR(80) UNIQUE NOT NULL,
 user_id INT(8) UNIQUE PRIMARY KEY AUTO_INCREMENT
 );
-
-Create user and grant privileges.
 
 CREATE TABLE options (
 id INT(8) PRIMARY KEY NOT NULL,
@@ -22,5 +23,6 @@ id INT(8) PRIMARY KEY NOT NULL,
 feed_url VARCHAR(510),
 feed_position_in_dom INT(2)
 );
+```
 
    
