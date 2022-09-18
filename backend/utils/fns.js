@@ -3,25 +3,25 @@ const parser = new XMLParser();
 const express = require('express');
 const {pool} = require("../common/pool");
 const {errorExistsInScript, errorExistsNotInScript} = require("../common/variables");
-const router = express.Router();
-
 const cc = console.log;
 
-function standardizedResponse(message = "", data = {}){
+exports.router = express.Router();
+
+exports.standardizedResponse = (message = "", data = {}) => {
     return {
         "data": data,
         "message": message,
     }
 }
 
-function genericError(res, message = "", data = {}, customStatus = 500){
+exports.genericError = (res, message = "", data = {}, customStatus = 500) => {
     res.status(customStatus).send({
         "data": data,
         "message": message,
     });
 }
 
-function genericSQLErrorCheck(res, err){
+exports.genericSQLErrorCheck = (res, err) => {
     if (err !== null){
         genericError(res, err.sqlMessage);
         return true;
@@ -50,8 +50,4 @@ exports.genericSQLPromise = async (query, values, res) => {
     return {error: didError, data: queryResults};
 }
 
-exports.standardizedResponse = standardizedResponse;
-exports.genericError = genericError;
-exports.genericSQLErrorCheck = genericSQLErrorCheck;
 exports.parser = parser;
-exports.router = router;
