@@ -5,13 +5,12 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const session = require('express-session');
 const {sessionOptions} = require("./common/sessionOptions");
+const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const xmlRouter = require('./routes/xml');
 const loginRouter = require('./routes/login');
-const {setHeaders} = require("./common/corsHeaders");
-/*const {corsDecorated} = require("./common/decorators");*/
 let cc = console.log;
 
 var app = express();
@@ -25,14 +24,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use((req, res, next) => {
-  setHeaders(res)
-  next();
-});
-
-/*app.use(corsDecorated)*/
 app.use(session(sessionOptions));
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true
+}));
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -44,8 +41,6 @@ app.use('/login', loginRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
-
 
 // error handler
 app.use(function(err, req, res, next) {
