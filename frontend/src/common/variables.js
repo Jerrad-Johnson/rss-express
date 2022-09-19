@@ -16,7 +16,6 @@ export const responseStrings = {
 export const defaultToastPromiseMessages = {
     loading: 'Loading ...',
     success: (data) => {
-        console.log(data);
         if (data.status === 500) throw new Error('Server error');
         return 'Finished.';
     },

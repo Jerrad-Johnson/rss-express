@@ -5,15 +5,19 @@ const {confirmLoggedIn} = require("../models/login/confirmLoggedIn");
 const cc = console.log;
 
 exports.loginControllerPost = async (req, res) => {
-    let results;
+    let queryResults;
 
-    results = await doesUserExist(req, res);
-    if (results.error === errorExistsInScript) return;
+    queryResults = await doesUserExist(req, res);
+    if (queryResults?.error === errorExistsInScript) return;
 
-    if (!results.data?.[0]){
-        results = await createUser(req, res);
-        if (results.error === errorExistsInScript) return;
+    if (!queryResults.data?.[0]){
+        queryResults = await createUser(req, res);
+        if (queryResults?.error === errorExistsInScript) return;
     }
 
-    confirmLoggedIn(req, res);
+    queryResults = await doesUserExist(req, res);
+    if (queryResults?.error === errorExistsInScript) return;
+
+    // TODO add if check here
+    confirmLoggedIn(req, res, queryResults);
 }

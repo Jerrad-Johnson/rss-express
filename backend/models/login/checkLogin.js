@@ -4,7 +4,7 @@ const cc = console.log;
 
 exports.doesUserExist = async (req, res) => {
     let didError = errorExistsNotInScript;
-    let query = 'SELECT email FROM users WHERE email = ?';
+    let query = 'SELECT email, id FROM users WHERE email = ?';
 
     results = await genericSQLPromise(query, req.body.email, res);
     if (results.error === errorExistsInScript) return errorExistsInScript;

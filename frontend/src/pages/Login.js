@@ -52,12 +52,12 @@ async function handleLogin(email) {
         return;
     }
 
-    let result = await toastDecoratedPromise(getLogin(email), defaultToastPromiseMessages);
-    if (result.message === responseStrings.success) window.location.href = "/";
-}
+    let checkLogin = await toastDecoratedPromise(getLogin(email), defaultToastPromiseMessages);
+    if (checkLogin.status !== 200) return;
+    let userData = await toastDecoratedPromise(getUserData(email), defaultToastPromiseMessages);
+    cc(userData)
 
-async function getLogin(email){
-    return await httpClient.post(serverURL + "/login", {"email": email});
+    //if (result.message === responseStrings.success) window.location.href = "/";
 }
 
 function validateEmail(email){
@@ -66,4 +66,12 @@ function validateEmail(email){
         .match(
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
+}
+
+async function getLogin(email){
+    return await httpClient.post(serverURL + "/login", {"email": email});
+}
+
+async function getUserData(email){
+    return await httpClient.post(serverURL + "/login/getuserdata", {"email": email});
 }

@@ -6,5 +6,5 @@ export function toastDecorated(msg){
 }
 
 export function toastDecoratedPromise(handler, messageObject){
-    toast.promise(handler, messageObject, toastStyle);
+    return toast.promise(handler, messageObject, toastStyle);
 }
