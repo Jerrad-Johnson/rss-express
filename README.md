@@ -23,6 +23,12 @@ var pool = mysql.createPool({
 
 exports.pool = pool;
 ```
+
+Create `sessionSecret.js` in backend/common and insert this and change the key:
+
+```
+exports.sessionSecret = "***";
+```
 ## Database Setup
 
 ```CREATE DATABASE rss-express;```
