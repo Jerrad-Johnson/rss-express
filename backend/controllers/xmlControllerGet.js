@@ -1,5 +1,5 @@
-const {getXML} = require("../models/getXML");
-const {parseXML} = require("../models/parseXML");
+const {getXML} = require("../models/xml/getXML");
+const {parseXML} = require("../models/xml/parseXML");
 const {standardizedResponse} = require("../utils/fns");
 const cc = console.log;
 

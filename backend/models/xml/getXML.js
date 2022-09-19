@@ -1,5 +1,5 @@
-const {httpClient} = require("../common/httpClient");
-const {genericError} = require("../utils/fns");
+const {httpClient} = require("../../common/httpClient");
+const {genericError} = require("../../utils/fns");
 const cc = console.log;
 
 exports.getXML = async (req, res) => {

@@ -1,4 +1,4 @@
-const {parser} = require("../utils/fns");
+const {parser} = require("../../utils/fns");
 
 exports.parseXML = (req, res, feedResponse) => {
     let parsedResponse = parser.parse(feedResponse.data);
