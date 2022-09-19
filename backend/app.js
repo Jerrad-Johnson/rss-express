@@ -1,15 +1,18 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-const axios = require('axios');
-let cc = console.log;
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const session = require('express-session');
+const {sessionOptions} = require("./common/sessionOptions");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var xmlRouter = require('./routes/xml');
-var loginRouter = require('./routes/login');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const xmlRouter = require('./routes/xml');
+const loginRouter = require('./routes/login');
+const {setHeaders} = require("./common/corsHeaders");
+/*const {corsDecorated} = require("./common/decorators");*/
+let cc = console.log;
 
 var app = express();
 
@@ -23,15 +26,26 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+  setHeaders(res)
+  next();
+});
+
+/*app.use(corsDecorated)*/
+app.use(session(sessionOptions));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/xml', xmlRouter);
 app.use('/login', loginRouter);
 
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
 
 // error handler
 app.use(function(err, req, res, next) {
