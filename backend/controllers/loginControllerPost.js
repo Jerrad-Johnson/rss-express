@@ -1,6 +1,7 @@
 const {doesUserExist} = require("../models/login/checkLogin");
-const {errorExistsInScript, errorExistsNotInScript, binaryAsString} = require("../common/variables");
+const {errorExistsInScript} = require("../common/variables");
 const {createUser} = require("../models/login/createUser");
+const {confirmLoggedIn} = require("../models/login/confirmLoggedIn");
 const cc = console.log;
 
 exports.loginControllerPost = async (req, res) => {
@@ -14,6 +15,5 @@ exports.loginControllerPost = async (req, res) => {
         if (results.error === errorExistsInScript) return;
     }
 
-    req.session.email = results.data[0].email
-    res.sendStatus(200)
+    confirmLoggedIn(req, res);
 }
