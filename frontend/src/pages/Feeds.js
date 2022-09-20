@@ -189,6 +189,12 @@ function Feeds(){
                                 <Button variant={"contained"}>Logout</Button>
                             </div>
                         </ListItem>
+                    <TextField variant={"standard"} sx={{width: "90%", paddingLeft: "18px"}} placeholder={"Feed URL"}/>
+                    <ListItem>
+                        <div className={"menuItemButtons"}>
+                            <Button variant={"contained"}>Add Feed</Button>
+                        </div>
+                    </ListItem>
                 </List>
             </Drawer>
         </div>
