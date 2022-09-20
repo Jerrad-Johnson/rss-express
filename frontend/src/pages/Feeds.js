@@ -406,6 +406,7 @@ function RSSCard({feed_url, position, options, optionsDispatch, feeds, setFeeds,
             {feedTitle}
             {rssResults === undefined && <CircularProgress/>}
             {rssResults !== undefined && panelsFromRSSTitles}
+            {reloadingIndicator}
           </>
       </div>
       </>
