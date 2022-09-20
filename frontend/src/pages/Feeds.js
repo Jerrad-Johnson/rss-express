@@ -195,6 +195,7 @@ function Feeds(){
                     <ListItem>
                         <div className={"menuItemButtons"}>
                             <Button variant={"contained"} onClick={(e) => {
+                                saveFeeds(feeds);
                             }}>Save Feeds</Button>
                         </div>
                     </ListItem>
@@ -468,7 +469,16 @@ async function handleLogout(){
 
 async function saveOptions(options){
     let response = await toastDecoratedPromise(httpClient.post(serverURL + "/usrsettings/options", options), defaultToastPromiseMessages);
-    cc(response)
+}
+
+async function saveFeeds(feeds){
+    let feedsReformatted = [];
+
+    for (let entry of feeds){
+        feedsReformatted.push(entry.feed_url);
+    }
+
+    let response = await toastDecoratedPromise(httpClient.post(serverURL + "/usrsettings/savefeeds", feedsReformatted), defaultToastPromiseMessages);
 }
 
 export default Feeds;
