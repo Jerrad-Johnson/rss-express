@@ -11,6 +11,9 @@ export const toastStyle = {
 export const responseStrings = {
     invalidEmail: "Invalid e-mail address.",
     success: "Success!",
+    invalidURL: "Invalid URL.",
+    duplicateURL: "Duplicate URL, please use only unique entries.",
+
 }
 
 export const defaultToastPromiseMessages = {

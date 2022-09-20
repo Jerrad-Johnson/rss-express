@@ -15,16 +15,18 @@ import ListItem from '@mui/material/ListItem';
 import {IconButton} from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import {serverURL, durationToTimeout} from "../common/variables";
+import {serverURL, durationToTimeout, responseStrings} from "../common/variables";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import httpClient from "../common/httpClient";
 import {ArrowLeft, ArrowRight} from "@mui/icons-material";
 import {Toaster} from "react-hot-toast";
+import {toastDecorated} from "../common/fns";
 
 let cc = console.log;
 
 function Feeds(){
     const theme = useTheme();
+    const [feedToAdd, setFeedToAdd] = useState("");
 
     cc(JSON.parse(localStorage.getItem("feeds")))
 
@@ -189,10 +191,15 @@ function Feeds(){
                                 <Button variant={"contained"}>Logout</Button>
                             </div>
                         </ListItem>
-                    <TextField variant={"standard"} sx={{width: "90%", paddingLeft: "18px"}} placeholder={"Feed URL"}/>
+                    <TextField variant={"standard"} sx={{width: "90%", paddingLeft: "18px"}} placeholder={"Feed URL"}
+                               value={feedToAdd} onChange={(e) => {
+                                   setFeedToAdd(e.target.value);
+                    }}/>
                     <ListItem>
                         <div className={"menuItemButtons"}>
-                            <Button variant={"contained"}>Add Feed</Button>
+                            <Button variant={"contained"} onClick={(e) => {
+                                handleAddFeed(feedToAdd, feeds, setFeeds);
+                            }}>Add Feed</Button>
                         </div>
                     </ListItem>
                 </List>
@@ -202,7 +209,9 @@ function Feeds(){
 
     return (
         <>
-            <Toaster/>
+            <Toaster
+                position={"bottom-center"
+            }/>
             <div className={"mainContainer"}>
                 <div className={"rssContainer"}>
                     {feedDOMCards}
@@ -417,6 +426,35 @@ function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, se
     }
 
     setFeeds(newFeedsArray);
+}
+
+function handleAddFeed(feedToAdd, feeds, setFeeds){
+    let expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
+    let regex = new RegExp(expression);
+    if (!feedToAdd.match(regex)) {
+        toastDecorated(responseStrings.invalidURL);
+        return;
+    }
+
+    let duplicate = false;
+
+    for (let i = 0; i < feeds.length; i++){
+        if (feedToAdd === feeds[i].feed_url){
+            toastDecorated(responseStrings.duplicateURL);
+            duplicate = true;
+            break;
+        }
+    }
+
+    if (duplicate === true) return;
+
+    let lastElementInArray = feeds.length-1;
+    let lastElementDOMPosition = feeds[lastElementInArray].feed_position_in_dom;
+    let newEntryReformatted = {feed_url: feedToAdd, feed_position_in_dom: lastElementInArray+1}
+
+    setFeeds((prev) => {
+        return [...prev, newEntryReformatted];
+    });
 }
 
 export default Feeds;
