@@ -29,5 +29,4 @@ exports.saveFeeds = async (req, res) => {
     }
 
     res.status(200).send(standardizedResponse());
-
 }
