@@ -18,7 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {serverURL, durationToTimeout, responseStrings, defaultToastPromiseMessages} from "../common/variables";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import httpClient from "../common/httpClient";
-import {ArrowLeft, ArrowRight} from "@mui/icons-material";
+import {ArrowLeft, ArrowRight, DeleteForever, RemoveCircle, RemoveCircleOutline} from "@mui/icons-material";
 import {Toaster} from "react-hot-toast";
 import {toastDecorated, toastDecoratedPromise} from "../common/fns";
 
@@ -287,6 +287,25 @@ function RSSCard({feed_url, position, options, optionsDispatch, feeds, setFeeds,
         },
     }));
 
+    const AccordionOptions = styled((props) => (
+        <MuiAccordionSummary
+            expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+            {...props}
+        />
+    ))(({ theme }) => ({
+        backgroundColor:
+            theme.palette.mode === 'dark'
+                ? 'rgba(255, 255, 255, .03)'
+                : 'rgba(0, 0, 0, .1)',
+        flexDirection: 'row-reverse',
+        '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+            transform: 'rotate(90deg)',
+        },
+        '& .MuiAccordionSummary-content': {
+            marginLeft: theme.spacing(1),
+        },
+    }));
+
     const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
         padding: theme.spacing(2),
         borderTop: '1px solid rgba(0, 0, 0, .125)',
@@ -331,6 +350,14 @@ function RSSCard({feed_url, position, options, optionsDispatch, feeds, setFeeds,
             <ArrowLeft onClick={(e) => {
                 handleMoveCard(position, cardDirections.left, cardDirections, feeds, setFeeds);
             }}/>
+            <RemoveCircleOutline fontSize={"small"} onClick={(_e) => {
+                setFeeds((prev) => {
+                    let newArray = [...prev];
+                    newArray.splice(position, 1);
+                    return newArray;
+                });
+            }}/>
+            &nbsp;
             <Typography variant="subtitle" component="h2" className={"feedTitle basicMargin"}>
                 {rssResults?.feedTitle}
             </Typography>
@@ -379,8 +406,6 @@ function RSSCard({feed_url, position, options, optionsDispatch, feeds, setFeeds,
             {feedTitle}
             {rssResults === undefined && <CircularProgress/>}
             {rssResults !== undefined && panelsFromRSSTitles}
-
-            {reloadingIndicator}
           </>
       </div>
       </>
