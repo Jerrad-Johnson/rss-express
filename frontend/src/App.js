@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import {Routes, Route, BrowserRouter} from "react-router-dom";
-import Home from "./pages/Home";
+import Feeds from "./pages/Feeds";
 import Login from "./pages/Login";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import {createTheme} from "@mui/material/styles";
@@ -20,7 +20,7 @@ function App() {
 
         <BrowserRouter>
               <Routes>
-                          <Route path={"/feeds"} element={<Home
+                          <Route path={"/feeds"} element={<Feeds
                              />}/>
 
                           <Route path={"/"} element={<Login

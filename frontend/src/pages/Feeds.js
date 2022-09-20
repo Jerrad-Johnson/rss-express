@@ -23,16 +23,20 @@ import {Toaster} from "react-hot-toast";
 
 let cc = console.log;
 
-function Home(){
-   const theme = useTheme();
+function Feeds(){
+    const theme = useTheme();
 
-   const feedsFromDatabase = [{
-        url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
-    }, {
-        url: "http://feeds.feedburner.com/SlickdealsnetHT?format=xml",
-    }, {
-        url: "http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml",
-    }];
+    cc(JSON.parse(localStorage.getItem("feeds")))
+
+    let feedsFromDatabase = [];
+    let optionsFromDatabase = [];
+
+    if (localStorage.getItem("feeds") !== null) feedsFromDatabase = JSON.parse(localStorage.getItem("feeds"))
+
+    if (localStorage.getItem("feeds") !== null){
+        optionsFromDatabase = JSON.parse(localStorage.getItem("options"))
+        optionsFromDatabase = optionsFromDatabase[0]
+    }
 
    const cardDirections = {
        left: "left",
@@ -54,8 +58,8 @@ function Home(){
     };*/
 
     const optionsInitialState = {
-        rssEntriesLimit: 7,
-        columnsPerRow: 2,
+        rssEntriesLimit: optionsFromDatabase.max_results_per_column || 7,
+        columnsPerRow: optionsFromDatabase.columns_displayed || 2,
     }
 
     const [options, optionsDispatch] = useReducer(optionsReducer, optionsInitialState);
@@ -73,8 +77,8 @@ function Home(){
 
     let feedDOMCards = feeds.map((e, k) => {
         return (
-            <RSSCard key={e.url}
-                     url={e.url}
+            <RSSCard key={e.feed_url}
+                     feed_url={e.feed_url}
                      position={k}
                      options = {options}
                      optionsDispatch = {optionsDispatch}
@@ -212,7 +216,7 @@ function Home(){
     )
 }
 
-function RSSCard({url, position, options, optionsDispatch, feeds, setFeeds, cardDirections}){
+function RSSCard({feed_url, position, options, optionsDispatch, feeds, setFeeds, cardDirections}){
     const [rssResults, setRSSResults] = useState(undefined);
     const [getEntriesNow, setGetEntriesNow] = useState(true);
     const [expanded, setExpanded] = useState(false);
@@ -274,7 +278,7 @@ function RSSCard({url, position, options, optionsDispatch, feeds, setFeeds, card
     if (getEntriesNow === true) {
         if (rssResults !== undefined) setReloading(loadingStateOptions.loading);
         setGetEntriesNow(false);
-        getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh, loadingStateOptions);
+        getXML(feed_url, setRSSResults, setReloading, willRefresh, setWillRefresh, loadingStateOptions);
     }
 
     let panelsFromRSSTitles = (<></>)
@@ -364,12 +368,12 @@ function RSSCard({url, position, options, optionsDispatch, feeds, setFeeds, card
     );
 }
 
-async function getXML(url, setRSSResults, setReloading, willRefresh, setWillRefresh, loadingStateOptions){
+async function getXML(feed_url, setRSSResults, setReloading, willRefresh, setWillRefresh, loadingStateOptions){
     let results;
     let error = false;
 
     try {
-        results = await httpClient.post(`${serverURL}/xml/getXML`, {feedURL: url});
+        results = await httpClient.post(`${serverURL}/xml/getXML`, {feedURL: feed_url});
     } catch (e){
         cc(e)
         error = true;
@@ -409,4 +413,4 @@ function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, se
     setFeeds(newFeedsArray);
 }
 
-export default Home;
+export default Feeds;
