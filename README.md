@@ -55,12 +55,10 @@ max_results_per_column INT(2) NOT NULL
 CREATE TABLE feeds (
 user_id INT(8) NOT NULL,
 id INT(20) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-feed_url VARCHAR(510) NOT NULL,
-feed_position_in_dom INT(2) NOT NULL
+feed_url VARCHAR(510) NOT NULL
 );
 
 ALTER TABLE feeds ADD UNIQUE INDEX id_url (user_id, feed_url);
-ALTER TABLE feeds ADD UNIQUE INDEX id_position (user_id, feed_position_in_dom);
 ALTER TABLE options ADD UNIQUE INDEX userid (user_id);
 ```
 
