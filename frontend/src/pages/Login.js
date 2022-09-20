@@ -55,9 +55,11 @@ async function handleLogin(email) {
     let checkLogin = await toastDecoratedPromise(getLogin(email), defaultToastPromiseMessages);
     if (checkLogin.status !== 200) return;
     let userData = await toastDecoratedPromise(getUserData(email), defaultToastPromiseMessages);
-    cc(userData)
 
-    //if (result.message === responseStrings.success) window.location.href = "/";
+    if (userData?.data?.data?.feeds) localStorage.setItem("feeds", JSON.stringify(userData?.data?.data?.feeds?.data));
+    if (userData?.data?.data?.options) localStorage.setItem("options", JSON.stringify(userData?.data?.data?.options?.data));
+
+    window.location.href = "/";
 }
 
 function validateEmail(email){
