@@ -59,7 +59,7 @@ async function handleLogin(email) {
     if (userData?.data?.data?.feeds) localStorage.setItem("feeds", JSON.stringify(userData?.data?.data?.feeds?.data));
     if (userData?.data?.data?.options) localStorage.setItem("options", JSON.stringify(userData?.data?.data?.options?.data));
 
-    window.location.href = "/";
+    window.location.href = "/feeds";
 }
 
 function validateEmail(email){
