@@ -28,8 +28,6 @@ function Feeds(){
     const theme = useTheme();
     const [feedToAdd, setFeedToAdd] = useState("");
 
-    cc(JSON.parse(localStorage.getItem("feeds")))
-
     let feedsFromDatabase = [];
     let optionsFromDatabase = [];
 
@@ -429,6 +427,7 @@ function handleMoveCard(itemPosition, directionToMove, cardDirections, feeds, se
 }
 
 function handleAddFeed(feedToAdd, feeds, setFeeds){
+    cc(feeds)
     let expression = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
     let regex = new RegExp(expression);
     if (!feedToAdd.match(regex)) {
