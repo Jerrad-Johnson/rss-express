@@ -1,6 +1,7 @@
 const {errorExistsNotInScript, errorExistsInScript} = require("./variables");
 const {genericError} = require("../utils/fns");
 const {pool} = require("./pool");
+let cc = console.log;
 
 exports.genericSQLPromise = async (query, values, res) => {
     let didError = errorExistsNotInScript;

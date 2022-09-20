@@ -27,8 +27,8 @@ function Home(){
    const theme = useTheme();
 
    const feedsFromDatabase = [{
-           url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
-       }, {
+        url: "http://feeds.feedburner.com/SlickdealsnetFP?format=xml",
+    }, {
         url: "http://feeds.feedburner.com/SlickdealsnetHT?format=xml",
     }, {
         url: "http://feeds.feedburner.com/SlickdealsnetForums-9?format=xml",
