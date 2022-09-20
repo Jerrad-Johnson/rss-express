@@ -8,9 +8,10 @@ const {sessionOptions} = require("./common/sessionOptions");
 const cors = require('cors');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const xmlRouter = require('./routes/xml');
 const loginRouter = require('./routes/login');
+const usrSettings = require('./routes/usrsettings');
+
 let cc = console.log;
 
 var app = express();
@@ -32,9 +33,9 @@ app.use(cors({
 
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/xml', xmlRouter);
 app.use('/login', loginRouter);
+app.use('/usrsettings', usrSettings);
 
 
 // catch 404 and forward to error handler

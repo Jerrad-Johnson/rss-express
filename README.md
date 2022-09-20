@@ -61,7 +61,7 @@ feed_position_in_dom INT(2) NOT NULL
 
 ALTER TABLE feeds ADD UNIQUE INDEX id_url (user_id, feed_url);
 ALTER TABLE feeds ADD UNIQUE INDEX id_position (user_id, feed_position_in_dom);
-
+ALTER TABLE options ADD UNIQUE INDEX userid (user_id);
 ```
 
    

@@ -176,7 +176,9 @@ function Feeds(){
                 <List>
                         <ListItem>
                             <div className={"menuItemButtons"}>
-                                <Button variant={"contained"}>Save Options</Button>
+                                <Button variant={"contained"} onClick={(e) => {
+                                    saveOptions(options);
+                                }}>Save Options</Button>
                             </div>
                         </ListItem>
                     <TextField variant={"standard"} sx={{width: "90%", paddingLeft: "18px"}} placeholder={"Feed URL"}
@@ -462,6 +464,11 @@ async function handleLogout(){
         localStorage.clear();
         window.location.href = "/";
     }
+}
+
+async function saveOptions(options){
+    let response = await toastDecoratedPromise(httpClient.post(serverURL + "/usrsettings/options", options), defaultToastPromiseMessages);
+    cc(response)
 }
 
 export default Feeds;
