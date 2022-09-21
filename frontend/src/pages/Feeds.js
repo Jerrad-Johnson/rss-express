@@ -29,13 +29,26 @@ function Feeds(){
     const [feedToAdd, setFeedToAdd] = useState("");
 
     let feedsFromDatabase = [];
-    let optionsFromDatabase = [];
+    let optionsForUI = {
+        max_results_per_column: 7,
+        columns_displayed: 2,
+    };
 
-    if (localStorage.getItem("feeds") !== null) feedsFromDatabase = JSON.parse(localStorage.getItem("feeds"))
+    if (
+        (localStorage.getItem("feeds") !== null)
+        &&
+        (JSON.parse(localStorage.getItem("feeds")).length !== 0)
+    ){
+        feedsFromDatabase = JSON.parse(localStorage.getItem("feeds"))
+    }
 
-    if (localStorage.getItem("feeds") !== null){
-        optionsFromDatabase = JSON.parse(localStorage.getItem("options"))
-        optionsFromDatabase = optionsFromDatabase[0]
+    if (
+        (localStorage.getItem("options") !== null)
+        &&
+        (JSON.parse(localStorage.getItem("options")).length !== 0)
+    ){
+        optionsForUI = JSON.parse(localStorage.getItem("options"))
+        optionsForUI = optionsForUI[0]
     }
 
    const cardDirections = {
@@ -58,8 +71,8 @@ function Feeds(){
     };*/
 
     const optionsInitialState = {
-        rssEntriesLimit: optionsFromDatabase.max_results_per_column || 7,
-        columnsPerRow: optionsFromDatabase.columns_displayed || 2,
+        rssEntriesLimit: optionsForUI.max_results_per_column,
+        columnsPerRow: optionsForUI.columns_displayed,
     }
 
     const [options, optionsDispatch] = useReducer(optionsReducer, optionsInitialState);

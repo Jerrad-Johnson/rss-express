@@ -1,4 +1,6 @@
-export const serverURL = 'http://localhost:3001';
+export const serverURL =
+    'https://rssbackend.jerradjohnson.com'; // prod
+    //'http://localhost:3001'; // dev
 
 export const toastStyle = {
     style: {
@@ -13,7 +15,6 @@ export const responseStrings = {
     success: "Success!",
     invalidURL: "Invalid URL.",
     duplicateURL: "Duplicate URL, please use only unique entries.",
-
 }
 
 export const defaultToastPromiseMessages = {
@@ -24,3 +25,4 @@ export const defaultToastPromiseMessages = {
     },
     error: 'Uh oh, there was an error! Please try again.',
 }
+
