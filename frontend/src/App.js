@@ -5,6 +5,7 @@ import Feeds from "./pages/Feeds";
 import Login from "./pages/Login";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import {createTheme} from "@mui/material/styles";
+import LoginRecruiter from "./pages/LoginRecruiter";
 
 const theme = createTheme({
     palette: {
@@ -20,11 +21,12 @@ function App() {
 
         <BrowserRouter>
               <Routes>
-                          <Route path={"/feeds"} element={<Feeds
-                             />}/>
-
-                          <Route path={"/"} element={<Login
-                            />}/>
+                  <Route path={"/feeds"} element={<Feeds
+                    />}/>
+                  <Route path={"/"} element={<Login
+                    />}/>
+                  <Route path={"/recruiterlogin"} element={<LoginRecruiter
+                    />}/>
               </Routes>
         </BrowserRouter>
       </ThemeProvider>

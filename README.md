@@ -2,11 +2,13 @@
 
 ## Frontend Setup
 
-Navigate to /frontend and run `npm install`
+Navigate to `/frontend` and run `npm ci`
+
+Then run `npm build`.
 
 ## Backend Setup
 
-Navigate to /backend and run `npm install`
+Navigate to `/backend` and run `npm ci`
 
 Create `pool.js` in `backend/common`, then insert and alter this as appropriate:
 ```
@@ -29,14 +31,19 @@ Create `sessionSecret.js` in `backend/common` and insert this and change the key
 ```
 exports.sessionSecret = "***";
 ```
+
+In `app.js`, set the origin for CORS.
+
 ## Database Setup
 
-```CREATE DATABASE rss-express;```
+```CREATE DATABASE rssexpress;```
 
-Create user, and then grant privileges:
+Create user and grant privileges:
 
 ```
-GRANT ALL PRIVILEGES ON `rss-express`.* TO 'rss-express-admin'@'localhost' WITH GRANT OPTION;
+CREATE USER 'rssexpressadmin'@'localhost' IDENTIFIED WITH mysql_native_password BY '***';
+
+GRANT ALL PRIVILEGES ON rssexpress.* TO 'rssexpressadmin'@'localhost';
 ```
 
 ```
@@ -62,4 +69,7 @@ ALTER TABLE feeds ADD UNIQUE INDEX id_url (user_id, feed_url);
 ALTER TABLE options ADD UNIQUE INDEX userid (user_id);
 ```
 
+## Known issues:
+
+![img.png](img.png)
    
